@@ -1,0 +1,190 @@
+================================================================================
+REPUBLIC OF KENYA - THE NATIONAL ASSEMBLY
+MEMBERS' ONBOARDING & RECORDS SYSTEM (MORS)
+DIGITAL ONBOARDING OF THE 14TH PARLIAMENT OF KENYA
+SYSTEM ACCESS, CREDENTIALS & PERMISSIONS DIRECTORY
+================================================================================
+
+Target Date: August 2027 (Transition & Induction to the 14th Parliament)
+Database Engine: SQLite (mors.db - 349 Constitutional Members)
+Live Application URL: http://mors.kimtechconsultancy.co.ke
+Local Development URL: http://localhost:5173
+Interactive API Docs (Swagger): http://mors.kimtechconsultancy.co.ke/docs
+Universal Default Password: Password123!
+
+--------------------------------------------------------------------------------
+1. PUBLIC MEMBER SELF-SERVICE ONBOARDING PORTAL (STAGE 2)
+--------------------------------------------------------------------------------
+Portal Access URL:
+- Live: http://mors.kimtechconsultancy.co.ke/portal
+- Local: http://localhost:5173/portal
+
+Who Uses This:
+All 349 Gazetted Members of the National Assembly (290 Constituency MPs, 
+47 County Woman Representatives, 12 Nominated Members).
+
+Authentication Method:
+No password required. Members search using their name as published in the 
+official IEBC Gazette Notice (e.g. "Babu Owino", "Ndindi Nyoro", "Passaris", 
+"Gladys Shollei", "Ichung'wah", "Tim Wanyonyi", "Sabina Chege").
+
+Member Capabilities:
+- Search and claim their authoritative gazette record.
+- Verify prefilled gazette particulars (Name, Category, County, Constituency, Party - Locked).
+- Enter personal biodata (Date of Birth, National ID, Phone, Email, KRA PIN, Address, Qualifications, Next of Kin).
+- Upload digital scans of National ID/Passport, Form 23 IEBC Certificate, and official passport photo.
+- Generate and print an official MORS Reference Slip (e.g., MORS-14P-XXXX).
+- Receive automated confirmation email containing Secretariat support contacts.
+
+
+--------------------------------------------------------------------------------
+2. STAFF WORKSPACE & DIRECTORATE LOGIN CREDENTIALS
+--------------------------------------------------------------------------------
+Staff Sign-In URL:
+- Live: http://mors.kimtechconsultancy.co.ke/login
+- Local: http://localhost:5173/login
+
+================================================================================
+ROLE 1: SYSTEM ADMINISTRATOR (ALL-ACCESS GLOBAL SUPER USER)
+================================================================================
+Username:        admin
+Password:        Password123!
+Assigned Name:   Allan Kimani (Administrative Officer III, Secretariat Lead)
+Directorate:     System Administration / Office of the Clerk
+Role Authority:  SUPER_USER (Full System Access)
+Permissions & Responsibilities:
+- Unrestricted access across all system modules, directorates, and tabs.
+- User management: Provision accounts, assign directorate roles, reset passwords.
+- System configuration: Toggle public portal open/closed, adjust registration deadlines.
+- Email Outbox oversight with resend capabilities.
+- Full access to all 8 statutory printable reports and CSV data export.
+
+================================================================================
+ROLE 2: CLERKS - LEGAL & PARLIAMENTARY AFFAIRS (L&P) (STAGE 3)
+================================================================================
+Username:        clerk.lp
+Password:        Password123!
+Assigned Name:   Dorothy Mwende / Serah Kioko
+Directorate:     Directorate of Legal & Parliamentary Affairs (L&P)
+Role Authority:  SUPER_USER (Registration Desk Station Lead)
+Permissions & Responsibilities:
+- Registration Desk Management: Physical check-in of arriving Members.
+- Document Inspection: Side-by-side audit of physical original documents (National ID, IEBC Certificate) against digital uploads.
+- Tick "Original Documents Physically Verified" and "Biodata Confirmed".
+- Administer and record Parliamentary Oath & Code of Conduct acceptance.
+- Receive and log sealed Initial Declaration of Assets & Liabilities envelopes.
+- Offline walk-in onboarding for Members who did not complete online forms.
+- Reopen online portal submissions for Members needing corrections.
+- Review and commit IEBC Gazette Notices (290 / 47 / 12 count verification).
+
+================================================================================
+ROLE 3: OFFICE OF THE CLERK (EXECUTIVE OVERSIGHT)
+================================================================================
+Username:        clerk.office
+Password:        Password123!
+Assigned Name:   Samuel Njoroge (The Clerk of the National Assembly)
+Directorate:     Office of the Clerk of the National Assembly
+Role Authority:  READ_ONLY (Executive Macro-Oversight)
+Permissions & Responsibilities:
+- Live Executive Funnel Dashboard: Real-time tracking of Gazetted vs Online vs Checked-In vs Fully Cleared Members.
+- Daily Influx Trajectory (14-day comparison of online submissions vs desk check-ins).
+- Parliamentary Demographics & Insights (Age brackets, gender balance, youth <35, first-term vs returning, party breakdown).
+- Access to 360-degree Member Dossiers.
+- Full access and print authority for all 8 official statutory reports.
+
+================================================================================
+ROLE 4: MEDIA RELATIONS & PUBLIC AFFAIRS DIRECTORATE (STAGE 4)
+================================================================================
+Username:        media.lead
+Password:        Password123!
+Assigned Name:   Erick Wandera
+Directorate:     Directorate of Media Relations & Public Affairs
+Role Authority:  SUPER_USER (Media Station Lead)
+Permissions & Responsibilities:
+- Media Relations Clearance Queue: Review official Member passport photographs.
+- Quality Audit: Check adherence to official parliamentary dress code (formal suit, plain background).
+- Tick "Official Passport Photo Approved" for Hansard and website roll.
+- Camera Capture & Replacement: Take new photo via webcam/camera or upload replacement if original is substandard.
+
+================================================================================
+ROLE 5: PARLIAMENTARY ICT DIRECTORATE (STAGE 4)
+================================================================================
+Username:        ict.lead
+Password:        Password123!
+Assigned Name:   Bernard Kiprotich
+Directorate:     Directorate of Information & Communication Technology (ICT)
+Role Authority:  SUPER_USER (ICT Lead)
+Permissions & Responsibilities:
+- Ingest and map IEBC Gazette notices (Excel, CSV, PDF).
+- ICT Clearance Queue: Record collection of chamber attendance biometrics and provision of electronic voting smartcards.
+- Tick "Chamber Biometrics Collected".
+- Monitor Confirmation Email Outbox delivery queue and trigger manual resends.
+- Toggle portal operational status and update registration closing deadlines.
+
+================================================================================
+ROLE 6: PARLIAMENTARY SECURITY & SAFETY DIRECTORATE (STAGE 4)
+================================================================================
+Username:        security.lead
+Password:        Password123!
+Assigned Name:   Major (Rtd.) Bashir Abdullahi
+Directorate:     Directorate of Parliamentary Security & Safety
+Role Authority:  SUPER_USER (Security Station Lead)
+Permissions & Responsibilities:
+- Security Screening Queue: Verify security vetting forms.
+- Issue Parliamentary Access and Identification Smart Badges (e.g. NA-14P-042).
+- Upload completed security vetting documentation.
+- Tick "Parliamentary Security Clearance Approved".
+
+================================================================================
+ROLE 7: HR & FINANCE DIRECTORATE (STAGE 4)
+================================================================================
+Username:        hr.finance
+Password:        Password123!
+Assigned Name:   Grace Nyambura
+Directorate:     Directorate of Human Resource & Finance / Accounting
+Role Authority:  SUPER_USER (HR & Finance Station Lead)
+Permissions & Responsibilities:
+- HR Clearance Queue: Record personal HR records and dependent information.
+- Finance Clearance Queue: Record commercial banking particulars (Bank Name, Branch, Account Number).
+- Statutory Clearance: Verify KRA PIN, NSSF Number, and Social Health Authority (SHA/SHIF) registration.
+- Tick "HR Records Verified" and "Finance & Payroll Enrolled".
+
+================================================================================
+ROLE 8: INTERNAL AUDITOR GENERAL (INDEPENDENT COMPLIANCE)
+================================================================================
+Username:        auditor
+Password:        Password123!
+Assigned Name:   CPA Peter Mecha (Internal Auditor General)
+Directorate:     Internal Audit Directorate
+Role Authority:  READ_ONLY (Independent Audit & Compliance)
+Permissions & Responsibilities:
+- Independent oversight of the tamper-evident System Audit Trail (985+ chronological events).
+- Inspect officer signatures, actions, resource targets, timestamps, and IP addresses.
+- Access to all 8 statutory reports and exports for compliance validation.
+
+
+--------------------------------------------------------------------------------
+3. THE 8 STATUTORY REPORTS AVAILABLE IN MORS
+--------------------------------------------------------------------------------
+Access: Available via the "Statutory Reports" menu or at /reports
+1. Executive Summary Report: Overall counts, funnel stages, and unit progress.
+2. Register of Members Report: Complete roll by category (290 Constituency, 47 Woman Rep, 12 Nominated).
+3. Online Submissions Audit Report: Timestamped pre-registrations with document upload statuses.
+4. Physical Onboarding Report: Desk check-in records, verifying clerk identity, oath and assets filing.
+5. Outstanding Clearance by Unit: Real-time bottleneck report showing Members pending each unit.
+6. Demographics & Profile Insights: Statistical analysis of age, gender, youth, and parties.
+7. Document Verification Status Report: Audit of National ID, IEBC Certificate, and photo approvals.
+8. Comprehensive System Audit Trail: Complete immutable historical log with IP addresses and actions.
+
+
+--------------------------------------------------------------------------------
+4. SUPPORT & HELP DESK
+--------------------------------------------------------------------------------
+Secretariat Email: mors.support@parliament.go.ke / registry@parliament.go.ke
+Helpline:          +254 (0)20 284 8000 / Ext 3100
+Physical Office:   Onboarding Secretariat, Main Dining Hall & Room 118,
+                   Parliament Buildings, Parliament Road, Nairobi, Kenya.
+
+================================================================================
+END OF PERMISSIONS DIRECTORY
+================================================================================
