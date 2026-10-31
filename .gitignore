@@ -1,0 +1,14 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+# Database (allow pre-seeded mors.db for easy deployment)
+!backend/mors.db
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Node
+node_modules/
+dist/
+.DS_Store
