@@ -87,7 +87,7 @@ const downloadTemplate = () => {
     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
       <h3 class="text-sm font-bold text-slate-900">Upload Gazette Notice Document</h3>
       <p class="text-xs text-slate-600">
-        Upload the official IEBC Gazette Notice in <strong>Excel (.xlsx)</strong>, <strong>CSV</strong>, or <strong>PDF</strong> format. The system automatically reads column headings (Surname, Other Names, Constituency, County, Party) and verifies counts against constitutional seats.
+        Upload the official IEBC Gazette Notice in <strong>PDF</strong>, <strong>Excel (.xlsx)</strong>, or <strong>CSV</strong> format. The system's intelligent extraction parser filters out preambles, statutory legal notices, and returning officer boilerplate to extract <strong>only the official list of elected members</strong> (290 Constituency MPs, 47 County Woman Reps, and 12 Nominated Members).
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">

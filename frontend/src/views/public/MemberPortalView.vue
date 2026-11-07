@@ -30,8 +30,11 @@ const formData = ref({
   kra_pin: '',
   postal_address: '',
   qualifications: '',
+  pa_name: '',
+  pa_phone: '',
+  pa_email: '',
   next_of_kin_name: '',
-  next_of_kin_relation: '',
+  next_of_kin_relation: 'Personal Assistant',
   next_of_kin_phone: '',
   next_of_kin_email: '',
   spam_honeypot: '' // Spam prevention
@@ -90,10 +93,13 @@ const selectMember = async (item) => {
     formData.value.kra_pin = res.data.kra_pin || ''
     formData.value.postal_address = res.data.postal_address || ''
     formData.value.qualifications = res.data.qualifications || ''
-    formData.value.next_of_kin_name = res.data.next_of_kin_name || ''
-    formData.value.next_of_kin_relation = res.data.next_of_kin_relation || ''
-    formData.value.next_of_kin_phone = res.data.next_of_kin_phone || ''
-    formData.value.next_of_kin_email = res.data.next_of_kin_email || ''
+    formData.value.pa_name = res.data.pa_name || res.data.next_of_kin_name || ''
+    formData.value.pa_phone = res.data.pa_phone || res.data.next_of_kin_phone || ''
+    formData.value.pa_email = res.data.pa_email || res.data.next_of_kin_email || ''
+    formData.value.next_of_kin_name = formData.value.pa_name
+    formData.value.next_of_kin_relation = 'Personal Assistant'
+    formData.value.next_of_kin_phone = formData.value.pa_phone
+    formData.value.next_of_kin_email = formData.value.pa_email
 
     currentStep.value = 2
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -132,10 +138,20 @@ const submitOnboarding = async () => {
   data.append('kra_pin', formData.value.kra_pin)
   data.append('postal_address', formData.value.postal_address)
   if (formData.value.qualifications) data.append('qualifications', formData.value.qualifications)
-  data.append('next_of_kin_name', formData.value.next_of_kin_name)
-  data.append('next_of_kin_relation', formData.value.next_of_kin_relation)
-  data.append('next_of_kin_phone', formData.value.next_of_kin_phone)
-  if (formData.value.next_of_kin_email) data.append('next_of_kin_email', formData.value.next_of_kin_email)
+  
+  // Personal Assistant / Next of Kin parameters
+  const paName = formData.value.pa_name || formData.value.next_of_kin_name
+  const paPhone = formData.value.pa_phone || formData.value.next_of_kin_phone
+  const paEmail = formData.value.pa_email || formData.value.next_of_kin_email
+  
+  data.append('pa_name', paName)
+  data.append('pa_phone', paPhone)
+  if (paEmail) data.append('pa_email', paEmail)
+  data.append('next_of_kin_name', paName)
+  data.append('next_of_kin_relation', 'Personal Assistant')
+  data.append('next_of_kin_phone', paPhone)
+  if (paEmail) data.append('next_of_kin_email', paEmail)
+  
   if (formData.value.spam_honeypot) data.append('spam_honeypot', formData.value.spam_honeypot)
 
   if (idDocFile.value) data.append('id_document', idDocFile.value)
@@ -382,8 +398,8 @@ const restartForm = () => {
               </div>
 
               <div>
-                <label class="block font-semibold text-slate-700 mb-1">Official Email Address *</label>
-                <input type="email" v-model="formData.email" required placeholder="e.g. member@example.com" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green" />
+                <label class="block font-semibold text-slate-700 mb-1">Email Address *</label>
+                <input type="email" v-model="formData.email" required placeholder="e.g. member@domain.com" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green" />
               </div>
 
               <div class="sm:col-span-2">
@@ -399,26 +415,24 @@ const restartForm = () => {
           </div>
 
           <div>
-            <h3 class="text-sm font-bold text-slate-900 pb-2 border-b border-slate-100 mb-4">2. Next of Kin Information</h3>
+            <div class="pb-2 border-b border-slate-100 mb-4 flex items-center justify-between">
+              <h3 class="text-sm font-bold text-slate-900">2. Personal Assistant Information</h3>
+              <span class="text-[11px] text-slate-500 font-medium">Designated liaison for onboarding coordination</span>
+            </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block font-semibold text-slate-700 mb-1">Full Name of Next of Kin *</label>
-                <input type="text" v-model="formData.next_of_kin_name" required class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green" />
+                <label class="block font-semibold text-slate-700 mb-1">Full Name of Personal Assistant *</label>
+                <input type="text" v-model="formData.pa_name" required placeholder="e.g. Grace Wanjiku" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green" />
               </div>
 
               <div>
-                <label class="block font-semibold text-slate-700 mb-1">Relationship *</label>
-                <input type="text" v-model="formData.next_of_kin_relation" required placeholder="e.g. Spouse, Son, Sister" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green" />
+                <label class="block font-semibold text-slate-700 mb-1">Personal Assistant Phone Number *</label>
+                <input type="tel" v-model="formData.pa_phone" required placeholder="e.g. +254 700 000 000" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green" />
               </div>
 
-              <div>
-                <label class="block font-semibold text-slate-700 mb-1">Next of Kin Phone Number *</label>
-                <input type="tel" v-model="formData.next_of_kin_phone" required class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green" />
-              </div>
-
-              <div>
-                <label class="block font-semibold text-slate-700 mb-1">Next of Kin Email Address</label>
-                <input type="email" v-model="formData.next_of_kin_email" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green" />
+              <div class="sm:col-span-2">
+                <label class="block font-semibold text-slate-700 mb-1">Personal Assistant Email Address</label>
+                <input type="email" v-model="formData.pa_email" placeholder="e.g. pa@example.com" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green" />
               </div>
             </div>
           </div>
@@ -446,9 +460,12 @@ const restartForm = () => {
       <!-- STEP 3: Document Uploads -->
       <div v-if="currentStep === 3" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
         <div class="mb-6">
-          <h2 class="text-lg font-extrabold text-slate-900">Upload Required Documents</h2>
-          <p class="text-xs text-slate-600 mt-0.5">
-            Allowed file formats: PDF, JPG, PNG (Max. 5 MB per file). Original documents must be presented physically at the Registration Desk.
+          <div class="flex items-center space-x-2">
+            <h2 class="text-lg font-extrabold text-slate-900">Upload Documents</h2>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Optional</span>
+          </div>
+          <p class="text-xs text-slate-600 mt-1">
+            Uploading digital scans is optional if you have not scanned them yet. You may complete your registration now and present physical original documents at the Registration Desk.
           </p>
         </div>
 
@@ -461,8 +478,11 @@ const restartForm = () => {
                 <User v-else class="w-10 h-10 text-slate-400" />
               </div>
               <div class="flex-1 text-center sm:text-left">
-                <label class="block font-bold text-slate-900 mb-1 text-sm">1. Official Passport Photograph *</label>
-                <p class="text-slate-500 mb-2">Clear colour photograph with a plain white or off-white background.</p>
+                <div class="flex items-center space-x-2 mb-1">
+                  <label class="block font-bold text-slate-900 text-sm">1. Passport Photograph</label>
+                  <span class="text-[10px] text-slate-400 font-semibold">(Optional)</span>
+                </div>
+                <p class="text-slate-500 mb-2">Clear colour photograph with a plain white background (or captured at Media Relations desk).</p>
                 <input type="file" @change="handlePhotoChange" accept="image/png,image/jpeg" class="text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-parliament-green file:text-white file:font-semibold hover:file:bg-parliament-green-dark cursor-pointer" />
               </div>
             </div>
@@ -470,23 +490,35 @@ const restartForm = () => {
 
           <!-- 2. National ID Scan -->
           <div class="p-4 rounded-xl border border-slate-200">
-            <label class="block font-bold text-slate-900 mb-1 text-sm">2. Scanned National ID or Valid Passport (Front & Back) *</label>
-            <p class="text-slate-500 mb-2">PDF, JPG, or PNG up to 5 MB.</p>
+            <div class="flex items-center space-x-2 mb-1">
+              <label class="block font-bold text-slate-900 text-sm">2. Scanned National ID or Valid Passport</label>
+              <span class="text-[10px] text-slate-400 font-semibold">(Optional)</span>
+            </div>
+            <p class="text-slate-500 mb-2">PDF, JPG, or PNG up to 5 MB (or verify original document at desk).</p>
             <input type="file" @change="handleIdDocChange" accept=".pdf,image/png,image/jpeg" class="text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-800 file:text-white file:font-semibold hover:file:bg-slate-900 cursor-pointer" />
           </div>
 
           <!-- 3. IEBC Certificate Scan -->
           <div class="p-4 rounded-xl border border-slate-200">
-            <label class="block font-bold text-slate-900 mb-1 text-sm">3. Scanned IEBC Certificate of Election / Nomination *</label>
-            <p class="text-slate-500 mb-2">The official Form 23 / Nomination Certificate issued by IEBC.</p>
+            <div class="flex items-center space-x-2 mb-1">
+              <label class="block font-bold text-slate-900 text-sm">3. Scanned IEBC Certificate of Election / Nomination</label>
+              <span class="text-[10px] text-slate-400 font-semibold">(Optional)</span>
+            </div>
+            <p class="text-slate-500 mb-2">Official Form 23 or Nomination Certificate issued by IEBC (or verify original at desk).</p>
             <input type="file" @change="handleIebcCertChange" accept=".pdf,image/png,image/jpeg" class="text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-800 file:text-white file:font-semibold hover:file:bg-slate-900 cursor-pointer" />
           </div>
 
-          <!-- Summary Confirmation -->
-          <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900">
-            <p class="font-bold">Declaration and Physical Verification Requirement:</p>
-            <p class="mt-1">
-              I hereby declare that the information and scanned documents submitted herein are genuine and true. I understand that physical check-in and original document inspection are mandatory before being cleared for the swearing-in ceremony.
+          <!-- NOTICE Box -->
+          <div class="p-4 rounded-xl bg-amber-50/90 border-2 border-amber-300 text-amber-950 shadow-sm">
+            <div class="flex items-center space-x-2 font-black text-xs uppercase tracking-wider text-amber-900">
+              <AlertCircle class="w-4 h-4 text-amber-700 flex-shrink-0" />
+              <span>NOTICE</span>
+            </div>
+            <p class="mt-1 text-xs font-semibold text-amber-900 leading-relaxed">
+              (Physical verification of documents is mandatory to ensure full onboarding)
+            </p>
+            <p class="mt-0.5 text-[11px] text-amber-800">
+              Kindly present your original National Identity Card / Passport and official IEBC Certificate upon reporting to the Clerks (L&P) Registration Desk at Parliament Buildings.
             </p>
           </div>
 

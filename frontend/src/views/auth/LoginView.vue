@@ -19,17 +19,10 @@ const handleLogin = async () => {
     await auth.login(username.value.trim(), password.value.trim())
     router.push('/dashboard')
   } catch (err) {
-    errorMessage.value = err.response?.data?.detail || 'Invalid username or password.'
+    errorMessage.value = err.response?.data?.detail || 'Incorrect email/username or password.'
   } finally {
     isSubmitting.value = false
   }
-}
-
-// Quick demo login helper
-const quickLogin = (u, p) => {
-  username.value = u
-  password.value = p
-  handleLogin()
 }
 </script>
 
@@ -53,7 +46,7 @@ const quickLogin = (u, p) => {
       <div class="mt-8 bg-white py-8 px-6 shadow-2xl rounded-2xl sm:px-10 border border-slate-100">
         <div class="border-b border-slate-100 pb-4 mb-6">
           <h2 class="text-base font-bold text-slate-900">Staff Portal Sign-In</h2>
-          <p class="text-xs text-slate-500 mt-0.5">Please authenticate with your assigned unit credentials.</p>
+          <p class="text-xs text-slate-500 mt-0.5">Authenticate with your assigned departmental email and password.</p>
         </div>
 
         <div v-if="errorMessage" class="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start space-x-2">
@@ -63,14 +56,14 @@ const quickLogin = (u, p) => {
 
         <form @submit.prevent="handleLogin" class="space-y-4 text-xs">
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Username / Staff ID</label>
+            <label class="block font-semibold text-slate-700 mb-1">Email Address / Username</label>
             <div class="relative">
               <input 
                 type="text" 
                 v-model="username" 
                 required 
-                placeholder="e.g. clerk.lp"
-                class="w-full pl-9 pr-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-parliament-green outline-none text-slate-900"
+                placeholder="e.g. clerk.lp@parliament.go.ke or clerk.lp"
+                class="w-full pl-9 pr-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-parliament-green outline-none text-slate-900 font-medium"
               />
               <User class="w-4 h-4 text-slate-400 absolute left-3 top-3" />
             </div>
@@ -90,58 +83,25 @@ const quickLogin = (u, p) => {
             </div>
           </div>
 
-          <button 
-            type="submit" 
-            :disabled="isSubmitting"
-            class="w-full py-2.5 bg-parliament-green hover:bg-parliament-green-dark text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
-          >
-            <span>{{ isSubmitting ? 'Authenticating...' : 'Sign In to Workspace' }}</span>
-            <ArrowRight class="w-4 h-4" />
-          </button>
+          <div class="pt-2">
+            <button 
+              type="submit" 
+              :disabled="isSubmitting"
+              class="w-full py-2.5 bg-parliament-green hover:bg-parliament-green-dark text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
+            >
+              <span>{{ isSubmitting ? 'Authenticating...' : 'Sign In to Workspace' }}</span>
+              <ArrowRight class="w-4 h-4" />
+            </button>
+          </div>
         </form>
 
-        <!-- Quick Switcher for Demo / Rehearsal -->
-        <div class="mt-6 pt-5 border-t border-slate-100">
-          <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center space-x-1">
-            <ShieldCheck class="w-3 h-3 text-parliament-gold" />
-            <span>Mock Gazette Pilot Roles (Click to Fill & Sign In)</span>
+        <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+          <div class="text-[11px] text-slate-400 flex items-center space-x-1">
+            <ShieldCheck class="w-3.5 h-3.5 text-parliament-gold" />
+            <span>MORS Role-Based Access Control</span>
           </div>
-          
-          <!-- Master Super Admin Button -->
-          <button 
-            type="button" 
-            @click="quickLogin('admin', 'Password123!')" 
-            class="w-full mb-2 p-2 rounded-xl bg-parliament-green/10 border-2 border-parliament-green text-parliament-green font-extrabold text-xs hover:bg-parliament-green hover:text-white transition-all flex items-center justify-between"
-          >
-            <span>👑 Super Administrator (Full All-Access)</span>
-            <span class="text-[10px] uppercase font-mono font-bold">admin</span>
-          </button>
-
-          <div class="grid grid-cols-2 gap-1.5 text-[10px]">
-            <button type="button" @click="quickLogin('clerk.lp', 'Password123!')" class="p-1.5 rounded-lg border border-slate-200 text-left hover:bg-slate-50 font-medium truncate">
-              ⚖️ Clerks (L&P)
-            </button>
-            <button type="button" @click="quickLogin('clerk.office', 'Password123!')" class="p-1.5 rounded-lg border border-slate-200 text-left hover:bg-slate-50 font-medium truncate">
-              🏛️ Clerk's Office
-            </button>
-            <button type="button" @click="quickLogin('media.lead', 'Password123!')" class="p-1.5 rounded-lg border border-slate-200 text-left hover:bg-slate-50 font-medium truncate">
-              📸 Media Relations
-            </button>
-            <button type="button" @click="quickLogin('ict.lead', 'Password123!')" class="p-1.5 rounded-lg border border-slate-200 text-left hover:bg-slate-50 font-medium truncate">
-              💻 ICT Admin
-            </button>
-            <button type="button" @click="quickLogin('security.lead', 'Password123!')" class="p-1.5 rounded-lg border border-slate-200 text-left hover:bg-slate-50 font-medium truncate">
-              🛡️ Security Unit
-            </button>
-            <button type="button" @click="quickLogin('hr.finance', 'Password123!')" class="p-1.5 rounded-lg border border-slate-200 text-left hover:bg-slate-50 font-medium truncate">
-              💼 HR & Finance
-            </button>
-          </div>
-        </div>
-
-        <div class="mt-6 text-center">
-          <router-link to="/portal" class="text-xs font-bold text-parliament-green hover:underline">
-            Go to Public Member Onboarding Portal &rarr;
+          <router-link to="/portal" class="font-bold text-parliament-green hover:underline">
+            Public Member Portal &rarr;
           </router-link>
         </div>
 

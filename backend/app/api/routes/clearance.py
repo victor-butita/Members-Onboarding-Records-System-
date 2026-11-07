@@ -23,10 +23,18 @@ def get_unit_queue(
     current_user: User = Depends(require_units(["MEDIA_RELATIONS", "ICT", "SECURITY", "HR_FINANCE", "CLERK_LP", "CLERK_OFFICE", "AUDITOR"])),
     db: Session = Depends(get_db)
 ):
-    query = db.query(Member).filter(Member.status == "ACTIVE")
-    
-    # Usually members must be at least checked in or submitted online to clear
     unit = unit_name.upper()
+    # Department isolation: Non-admin users cannot access queues of other departments
+    if current_user.unit not in ["SYSTEM_ADMIN", "CLERK_OFFICE", "AUDITOR"]:
+        user_unit = "HR_FINANCE" if current_user.unit in ["HR", "FINANCE"] else current_user.unit
+        target_unit = "HR_FINANCE" if unit in ["HR", "FINANCE"] else unit
+        if user_unit != target_unit:
+            raise HTTPException(
+                status_code=403,
+                detail=f"Department Isolation: User in '{current_user.unit}' cannot access or perform work for '{unit_name}'."
+            )
+
+    query = db.query(Member).filter(Member.status == "ACTIVE")
     if unit == "MEDIA_RELATIONS":
         if status_filter == "PENDING":
             query = query.filter(Member.photo_approved == False)

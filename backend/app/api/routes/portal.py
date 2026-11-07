@@ -92,10 +92,13 @@ def get_member_portal_profile(member_id: int, db: Session = Depends(get_db)):
         "kra_pin": member.kra_pin,
         "postal_address": member.postal_address,
         "qualifications": member.qualifications,
-        "next_of_kin_name": member.next_of_kin_name,
-        "next_of_kin_relation": member.next_of_kin_relation,
-        "next_of_kin_phone": member.next_of_kin_phone,
-        "next_of_kin_email": member.next_of_kin_email,
+        "pa_name": member.pa_name or member.next_of_kin_name,
+        "pa_phone": member.pa_phone or member.next_of_kin_phone,
+        "pa_email": member.pa_email or member.next_of_kin_email,
+        "next_of_kin_name": member.next_of_kin_name or member.pa_name,
+        "next_of_kin_relation": member.next_of_kin_relation or "Personal Assistant",
+        "next_of_kin_phone": member.next_of_kin_phone or member.pa_phone,
+        "next_of_kin_email": member.next_of_kin_email or member.pa_email,
         "has_id_upload": bool(member.id_document_path),
         "has_iebc_cert": bool(member.iebc_cert_path),
         "has_photo": bool(member.passport_photo_path)
@@ -134,9 +137,13 @@ async def submit_member_portal(
     kra_pin: str = Form(...),
     postal_address: str = Form(...),
     qualifications: Optional[str] = Form(None),
-    next_of_kin_name: str = Form(...),
-    next_of_kin_relation: str = Form(...),
-    next_of_kin_phone: str = Form(...),
+    # Personal Assistant / Next of Kin
+    pa_name: Optional[str] = Form(None),
+    pa_phone: Optional[str] = Form(None),
+    pa_email: Optional[str] = Form(None),
+    next_of_kin_name: Optional[str] = Form(None),
+    next_of_kin_relation: Optional[str] = Form(None),
+    next_of_kin_phone: Optional[str] = Form(None),
     next_of_kin_email: Optional[str] = Form(None),
     spam_honeypot: Optional[str] = Form(None),
     id_document: Optional[UploadFile] = File(None),
@@ -189,10 +196,19 @@ async def submit_member_portal(
     member.kra_pin = kra_pin.strip().upper()
     member.postal_address = postal_address.strip()
     member.qualifications = qualifications.strip() if qualifications else None
-    member.next_of_kin_name = next_of_kin_name.strip()
-    member.next_of_kin_relation = next_of_kin_relation.strip()
-    member.next_of_kin_phone = next_of_kin_phone.strip()
-    member.next_of_kin_email = next_of_kin_email.strip() if next_of_kin_email else None
+    
+    # Personal Assistant / Next of Kin fields
+    effective_pa_name = (pa_name or next_of_kin_name or "").strip()
+    effective_pa_phone = (pa_phone or next_of_kin_phone or "").strip()
+    effective_pa_email = (pa_email or next_of_kin_email or "").strip() if (pa_email or next_of_kin_email) else None
+    
+    member.pa_name = effective_pa_name
+    member.pa_phone = effective_pa_phone
+    member.pa_email = effective_pa_email
+    member.next_of_kin_name = effective_pa_name
+    member.next_of_kin_relation = (next_of_kin_relation or "Personal Assistant").strip()
+    member.next_of_kin_phone = effective_pa_phone
+    member.next_of_kin_email = effective_pa_email
     
     # Generate reference number if not already assigned
     if not member.submission_reference:

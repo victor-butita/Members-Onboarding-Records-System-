@@ -9,6 +9,20 @@ import {
 
 const auth = useAuthStore()
 
+// Strict departmental isolation: Admin sees all stations; department staff only see their station
+const isAdmin = computed(() => {
+  return auth.unit === 'SYSTEM_ADMIN' || auth.unit === 'CLERK_OFFICE' || auth.role === 'SUPER_USER'
+})
+
+const canAccessTab = (tab) => {
+  if (isAdmin.value) return true
+  if (tab === 'MEDIA' && auth.unit === 'MEDIA_RELATIONS') return true
+  if (tab === 'ICT' && auth.unit === 'ICT') return true
+  if (tab === 'SECURITY' && auth.unit === 'SECURITY') return true
+  if (tab === 'HR_FINANCE' && ['HR_FINANCE', 'HR', 'FINANCE'].includes(auth.unit)) return true
+  return false
+}
+
 // Active clearance tab
 const activeTab = ref('MEDIA') // MEDIA, ICT, SECURITY, HR_FINANCE
 const queue = ref([])
@@ -77,12 +91,14 @@ onMounted(() => {
   if (auth.unit === 'MEDIA_RELATIONS') activeTab.value = 'MEDIA'
   else if (auth.unit === 'ICT') activeTab.value = 'ICT'
   else if (auth.unit === 'SECURITY') activeTab.value = 'SECURITY'
-  else if (auth.unit === 'HR_FINANCE') activeTab.value = 'HR_FINANCE'
+  else if (['HR_FINANCE', 'HR', 'FINANCE'].includes(auth.unit)) activeTab.value = 'HR_FINANCE'
+  else activeTab.value = 'MEDIA'
   
   fetchQueue()
 })
 
 const switchTab = (tab) => {
+  if (!canAccessTab(tab)) return
   activeTab.value = tab
   selectedMember.value = null
   fetchQueue()
@@ -243,27 +259,30 @@ const filteredQueue = computed(() => {
       </button>
     </div>
 
-    <!-- Unit Tabs Navigation -->
+    <!-- Unit Tabs Navigation (Strict Department Isolation) -->
     <div class="flex border-b border-slate-200 space-x-2 text-xs font-bold">
       <button 
+        v-if="canAccessTab('MEDIA')"
         @click="switchTab('MEDIA')"
         class="py-3 px-4 border-b-2 flex items-center space-x-2 transition-all"
         :class="activeTab === 'MEDIA' ? 'border-parliament-green text-parliament-green bg-emerald-50/50' : 'border-transparent text-slate-500 hover:text-slate-800'"
       >
         <Camera class="w-4 h-4" />
-        <span>1. Media Relations (Photo)</span>
+        <span>1. Media Relations (Official Photo)</span>
       </button>
 
       <button 
+        v-if="canAccessTab('ICT')"
         @click="switchTab('ICT')"
         class="py-3 px-4 border-b-2 flex items-center space-x-2 transition-all"
         :class="activeTab === 'ICT' ? 'border-parliament-green text-parliament-green bg-emerald-50/50' : 'border-transparent text-slate-500 hover:text-slate-800'"
       >
         <Cpu class="w-4 h-4" />
-        <span>2. ICT (Biometrics)</span>
+        <span>2. ICT (Chamber Biometrics)</span>
       </button>
 
       <button 
+        v-if="canAccessTab('SECURITY')"
         @click="switchTab('SECURITY')"
         class="py-3 px-4 border-b-2 flex items-center space-x-2 transition-all"
         :class="activeTab === 'SECURITY' ? 'border-parliament-green text-parliament-green bg-emerald-50/50' : 'border-transparent text-slate-500 hover:text-slate-800'"
@@ -273,6 +292,7 @@ const filteredQueue = computed(() => {
       </button>
 
       <button 
+        v-if="canAccessTab('HR_FINANCE')"
         @click="switchTab('HR_FINANCE')"
         class="py-3 px-4 border-b-2 flex items-center space-x-2 transition-all"
         :class="activeTab === 'HR_FINANCE' ? 'border-parliament-green text-parliament-green bg-emerald-50/50' : 'border-transparent text-slate-500 hover:text-slate-800'"

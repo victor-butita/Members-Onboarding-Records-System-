@@ -125,7 +125,7 @@ const exportCsv = () => {
               <span class="text-xl font-black text-amber-900">{{ reportData.stages.SUBMITTED_ONLINE }}</span>
             </div>
             <div class="p-3 rounded-xl bg-blue-50 border border-blue-200">
-              <span class="text-blue-700 block">Desk Check-Ins:</span>
+              <span class="text-blue-700 block">Onboarded:</span>
               <span class="text-xl font-black text-blue-900">{{ reportData.stages.DESK_CHECKED_IN }}</span>
             </div>
             <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
@@ -172,7 +172,7 @@ const exportCsv = () => {
               <td class="py-1.5 px-3">{{ r.category.replace('_', ' ') }}</td>
               <td class="py-1.5 px-3">{{ r.county }} / {{ r.constituency }}</td>
               <td class="py-1.5 px-3">{{ r.party }}</td>
-              <td class="py-1.5 px-3 font-semibold">{{ r.stage.replace(/_/g, ' ') }}</td>
+              <td class="py-1.5 px-3 font-semibold">{{ r.stage === 'DESK_CHECKED_IN' ? 'ONBOARDED' : r.stage.replace(/_/g, ' ') }}</td>
               <td class="py-1.5 px-3 font-mono text-slate-500">{{ r.submission_reference }}</td>
             </tr>
           </tbody>
@@ -258,7 +258,7 @@ const exportCsv = () => {
                   {{ u }}
                 </span>
               </td>
-              <td class="py-1.5 px-3 font-semibold">{{ r.stage.replace(/_/g, ' ') }}</td>
+              <td class="py-1.5 px-3 font-semibold">{{ r.stage === 'DESK_CHECKED_IN' ? 'ONBOARDED' : r.stage.replace(/_/g, ' ') }}</td>
             </tr>
           </tbody>
         </table>

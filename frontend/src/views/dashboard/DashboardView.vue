@@ -91,12 +91,12 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- Desk Checked-In -->
+      <!-- Onboarded -->
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
-        <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">3. Desk Check-Ins (L&P)</div>
+        <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">3. Onboarded</div>
         <div class="text-3xl font-black text-slate-900 mt-2">{{ stats.funnel.desk_checked_in }}</div>
         <div class="text-[11px] text-blue-600 font-bold mt-1">
-          <span>{{ stats.funnel.desk_checked_in_pct }}% Physically Reported</span>
+          <span>{{ stats.funnel.desk_checked_in_pct }}% Physically Onboarded</span>
         </div>
         <div class="absolute right-4 top-4 w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
           <UserCheck class="w-5 h-5" />
@@ -129,7 +129,7 @@ onMounted(() => {
         <div 
           class="bg-blue-500 h-full transition-all duration-500" 
           :style="{ width: `${Math.max(0, stats.funnel.desk_checked_in_pct - stats.funnel.fully_cleared_pct)}%` }"
-          title="Desk Verified"
+          title="Onboarded"
         ></div>
         <div 
           class="bg-amber-400 h-full transition-all duration-500" 
@@ -139,7 +139,7 @@ onMounted(() => {
       </div>
       <div class="flex flex-wrap gap-4 text-xs mt-3 pt-2 border-t border-slate-100">
         <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-emerald-600"></span><span class="text-slate-600 font-medium">Fully Cleared: {{ stats.funnel.fully_cleared }}</span></div>
-        <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-blue-500"></span><span class="text-slate-600 font-medium">Physical Desk Verified: {{ stats.funnel.desk_checked_in }}</span></div>
+        <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-blue-500"></span><span class="text-slate-600 font-medium">Onboarded: {{ stats.funnel.desk_checked_in }}</span></div>
         <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-amber-400"></span><span class="text-slate-600 font-medium">Online Biodata Submitted: {{ stats.funnel.submitted_online }}</span></div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from app.core.database import get_db
 from app.core.security import verify_password, hash_password, create_access_token
 from app.models.models import User
@@ -10,8 +11,13 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/login", response_model=Token)
 def login(request_data: LoginRequest, request: Request, db: Session = Depends(get_db)):
-    clean_username = request_data.username.strip().lower()
-    user = db.query(User).filter(User.username.ilike(clean_username)).first()
+    clean_identifier = request_data.username.strip().lower()
+    user = db.query(User).filter(
+        or_(
+            User.username.ilike(clean_identifier),
+            User.email.ilike(clean_identifier)
+        )
+    ).first()
     
     # Check password directly, or trimmed in case of copy-paste whitespace/tabs
     pwd_valid = False

@@ -27,6 +27,7 @@ class UserCreate(BaseModel):
 class UserUpdate(BaseModel):
     full_name: Optional[str] = None
     email: Optional[str] = None
+    unit: Optional[str] = None
     role: Optional[str] = None
     is_active: Optional[bool] = None
 
@@ -92,9 +93,13 @@ class MemberPortalSubmitRequest(BaseModel):
     kra_pin: str
     postal_address: str
     qualifications: Optional[str] = None
-    next_of_kin_name: str
-    next_of_kin_relation: str
-    next_of_kin_phone: str
+    # Personal Assistant / Next of kin
+    pa_name: Optional[str] = None
+    pa_phone: Optional[str] = None
+    pa_email: Optional[str] = None
+    next_of_kin_name: Optional[str] = None
+    next_of_kin_relation: Optional[str] = None
+    next_of_kin_phone: Optional[str] = None
     next_of_kin_email: Optional[str] = None
     spam_honeypot: Optional[str] = None  # Spam prevention field
 
@@ -115,6 +120,9 @@ class MemberUpdateRequest(BaseModel):
     kra_pin: Optional[str] = None
     postal_address: Optional[str] = None
     qualifications: Optional[str] = None
+    pa_name: Optional[str] = None
+    pa_phone: Optional[str] = None
+    pa_email: Optional[str] = None
     next_of_kin_name: Optional[str] = None
     next_of_kin_relation: Optional[str] = None
     next_of_kin_phone: Optional[str] = None
@@ -146,6 +154,9 @@ class MemberResponse(BaseModel):
     kra_pin: Optional[str] = None
     postal_address: Optional[str] = None
     qualifications: Optional[str] = None
+    pa_name: Optional[str] = None
+    pa_phone: Optional[str] = None
+    pa_email: Optional[str] = None
     next_of_kin_name: Optional[str] = None
     next_of_kin_relation: Optional[str] = None
     next_of_kin_phone: Optional[str] = None

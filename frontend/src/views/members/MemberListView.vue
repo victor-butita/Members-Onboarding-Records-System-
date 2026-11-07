@@ -122,7 +122,7 @@ const submitStatusChange = async () => {
           <option value="ALL">All Stages</option>
           <option value="GAZETTED">1. Gazetted</option>
           <option value="SUBMITTED_ONLINE">2. Submitted Online</option>
-          <option value="DESK_CHECKED_IN">3. Desk Checked In</option>
+          <option value="DESK_CHECKED_IN">3. Onboarded</option>
           <option value="FULLY_CLEARED">4. Fully Cleared</option>
         </select>
 
@@ -186,7 +186,7 @@ const submitStatusChange = async () => {
                     'bg-emerald-100 text-emerald-800': m.stage === 'FULLY_CLEARED'
                   }"
                 >
-                  {{ m.stage.replace(/_/g, ' ') }}
+                  {{ m.stage === 'DESK_CHECKED_IN' ? 'ONBOARDED' : m.stage.replace(/_/g, ' ') }}
                 </span>
               </td>
               <td class="py-3 px-4">

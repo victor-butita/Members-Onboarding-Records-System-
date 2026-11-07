@@ -85,7 +85,7 @@ onMounted(() => {
               'bg-emerald-100 text-emerald-800': data.member.stage === 'FULLY_CLEARED'
             }"
           >
-            {{ data.member.stage.replace(/_/g, ' ') }}
+            {{ data.member.stage === 'DESK_CHECKED_IN' ? 'ONBOARDED' : data.member.stage.replace(/_/g, ' ') }}
           </span>
           <span class="text-xs font-mono font-bold text-slate-700">{{ data.member.submission_reference || 'Reference Pending' }}</span>
         </div>
@@ -178,12 +178,12 @@ onMounted(() => {
           <div><span class="text-slate-500 block">Date of Birth:</span> <strong class="text-slate-900">{{ data.member.date_of_birth || '—' }}</strong></div>
           <div><span class="text-slate-500 block">National ID / Passport:</span> <strong class="text-slate-900 font-mono">{{ data.member.national_id || '—' }}</strong></div>
           <div><span class="text-slate-500 block">KRA PIN Number:</span> <strong class="text-slate-900 font-mono">{{ data.member.kra_pin || '—' }}</strong></div>
-          <div><span class="text-slate-500 block">Official Mobile Phone:</span> <strong class="text-slate-900">{{ data.member.phone || '—' }}</strong></div>
-          <div><span class="text-slate-500 block">Official Email Address:</span> <strong class="text-slate-900">{{ data.member.email || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">Mobile Phone:</span> <strong class="text-slate-900">{{ data.member.phone || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">Email Address:</span> <strong class="text-slate-900">{{ data.member.email || '—' }}</strong></div>
           <div><span class="text-slate-500 block">Postal Address:</span> <strong class="text-slate-900">{{ data.member.postal_address || '—' }}</strong></div>
-          <div><span class="text-slate-500 block">Next of Kin Name:</span> <strong class="text-slate-900">{{ data.member.next_of_kin_name || '—' }}</strong></div>
-          <div><span class="text-slate-500 block">Next of Kin Relationship:</span> <strong class="text-slate-900">{{ data.member.next_of_kin_relation || '—' }}</strong></div>
-          <div><span class="text-slate-500 block">Next of Kin Contact:</span> <strong class="text-slate-900">{{ data.member.next_of_kin_phone || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">Personal Assistant Name:</span> <strong class="text-slate-900">{{ data.member.pa_name || data.member.next_of_kin_name || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">Personal Assistant Phone:</span> <strong class="text-slate-900">{{ data.member.pa_phone || data.member.next_of_kin_phone || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">Personal Assistant Email:</span> <strong class="text-slate-900">{{ data.member.pa_email || data.member.next_of_kin_email || '—' }}</strong></div>
         </div>
       </div>
 

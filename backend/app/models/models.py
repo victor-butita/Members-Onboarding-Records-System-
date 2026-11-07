@@ -56,11 +56,35 @@ class Member(Base):
     postal_address = Column(String(200), nullable=True)
     qualifications = Column(Text, nullable=True)
     
-    # Next of kin
+    # Personal Assistant (stored in next_of_kin columns for full DB compatibility)
     next_of_kin_name = Column(String(100), nullable=True)
     next_of_kin_relation = Column(String(50), nullable=True)
     next_of_kin_phone = Column(String(30), nullable=True)
     next_of_kin_email = Column(String(120), nullable=True)
+    
+    @property
+    def pa_name(self):
+        return self.next_of_kin_name
+        
+    @pa_name.setter
+    def pa_name(self, value):
+        self.next_of_kin_name = value
+        
+    @property
+    def pa_phone(self):
+        return self.next_of_kin_phone
+        
+    @pa_phone.setter
+    def pa_phone(self, value):
+        self.next_of_kin_phone = value
+        
+    @property
+    def pa_email(self):
+        return self.next_of_kin_email
+        
+    @pa_email.setter
+    def pa_email(self, value):
+        self.next_of_kin_email = value
     
     # Onboarding status & lifecycle
     stage = Column(String(30), default="GAZETTED", index=True)  # GAZETTED, SUBMITTED_ONLINE, DESK_CHECKED_IN, FULLY_CLEARED
