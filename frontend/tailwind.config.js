@@ -6,17 +6,26 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['"Source Sans 3"', 'Inter', 'system-ui', 'sans-serif'],
+        serif: ['"Source Serif 4"', 'Georgia', 'serif'],
+      },
       colors: {
         parliament: {
-          green: '#005C2B',
-          'green-light': '#008740',
-          'green-dark': '#00431F',
-          gold: '#CBA135',
-          'gold-light': '#E2BE5E',
-          'gold-dark': '#A88225',
-          red: '#BB2B2B',
-          black: '#111827'
+          green: '#0B4D2C',
+          'green-light': '#1F7A45',
+          'green-dark': '#08361F',
+          gold: '#C4A35A',
+          'gold-light': '#E4C98A',
+          'gold-dark': '#8C7030',
+          red: '#9E2B2B',
+          black: '#101612',
+          ink: '#16241C',
+          paper: '#F4F6F2'
         }
+      },
+      boxShadow: {
+        card: '0 1px 2px rgba(16, 36, 24, 0.04), 0 16px 40px -24px rgba(11, 61, 36, 0.45)',
       }
     },
   },

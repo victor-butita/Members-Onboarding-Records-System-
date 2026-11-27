@@ -66,7 +66,7 @@ Frontend Web Portal: **http://localhost:5173**
 
 ---
 
-## 👥 Mock Rehearsal User Accounts (Seed Data)
+## 👥 Staff accounts (email and password, one department each)
 
 All accounts are pre-seeded for testing and demonstration:
 

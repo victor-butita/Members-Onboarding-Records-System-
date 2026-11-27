@@ -13,6 +13,7 @@ const isLoading = ref(true)
 
 // Drawer / Modal states
 const activeMember = ref(null)
+const viewingMember = ref(null)
 const editingMember = ref(null)
 const isSubmitting = ref(false)
 const modalError = ref('')
@@ -50,6 +51,16 @@ const fetchDeskQueue = async () => {
 onMounted(() => {
   fetchDeskQueue()
 })
+
+const openViewModal = (m) => {
+  viewingMember.value = m
+}
+
+const openEditFromView = () => {
+  const member = viewingMember.value
+  viewingMember.value = null
+  if (member) openEditModal(member)
+}
 
 const openVerifyModal = (m) => {
   activeMember.value = m
@@ -273,6 +284,14 @@ const triggerReopen = async () => {
               <td class="py-3 px-4 text-right">
                 <div class="flex items-center justify-end space-x-2">
                   <button 
+                    @click="openViewModal(m)"
+                    class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-[11px] shadow-sm flex items-center space-x-1"
+                    title="View the details this member submitted"
+                  >
+                    <Eye class="w-3.5 h-3.5 text-slate-600" />
+                    <span>View</span>
+                  </button>
+                  <button 
                     @click="openEditModal(m)"
                     class="px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-[11px] shadow-sm flex items-center space-x-1"
                     title="View submitted details and correct any errors"
@@ -293,6 +312,44 @@ const triggerReopen = async () => {
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- MODAL: VIEW SUBMITTED DETAILS -->
+    <div v-if="viewingMember" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 border border-slate-200 max-h-[90vh] overflow-y-auto text-xs">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+          <div>
+            <div class="text-[10px] font-bold text-parliament-gold uppercase">Registration Desk · Submitted details</div>
+            <h3 class="text-base font-extrabold text-slate-900">Hon. {{ viewingMember.full_name }}</h3>
+          </div>
+          <button @click="viewingMember = null" class="text-slate-400 hover:text-slate-600">
+            <X class="w-5 h-5" />
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <div><span class="text-slate-500 block">Category</span><strong>{{ viewingMember.category?.replace('_', ' ') }}</strong></div>
+          <div><span class="text-slate-500 block">Party</span><strong>{{ viewingMember.party || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">County</span><strong>{{ viewingMember.county || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">Constituency</span><strong>{{ viewingMember.constituency || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">National ID</span><strong class="font-mono">{{ viewingMember.national_id || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">Date of birth</span><strong>{{ viewingMember.date_of_birth || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">Phone</span><strong>{{ viewingMember.phone || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">Email</span><strong>{{ viewingMember.email || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">KRA PIN</span><strong class="font-mono">{{ viewingMember.kra_pin || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">Postal address</span><strong>{{ viewingMember.postal_address || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">Personal assistant</span><strong>{{ viewingMember.pa_name || viewingMember.next_of_kin_name || '—' }}</strong></div>
+          <div><span class="text-slate-500 block">PA phone</span><strong>{{ viewingMember.pa_phone || viewingMember.next_of_kin_phone || '—' }}</strong></div>
+          <div class="sm:col-span-2"><span class="text-slate-500 block">PA email</span><strong>{{ viewingMember.pa_email || viewingMember.next_of_kin_email || '—' }}</strong></div>
+        </div>
+
+        <p class="mt-3 text-[11px] text-slate-500">If the physical documents do not match these details, correct them before verification.</p>
+
+        <div class="flex justify-end space-x-2 pt-4 border-t border-slate-100 mt-4">
+          <button @click="viewingMember = null" class="px-4 py-2 rounded-xl border border-slate-200 font-semibold text-slate-700">Close</button>
+          <button @click="openEditFromView" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold">Correct particulars</button>
+        </div>
       </div>
     </div>
 
@@ -360,7 +417,7 @@ const triggerReopen = async () => {
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label class="block font-semibold text-slate-700 mb-1">National ID / Passport *</label>
-                <input type="text" v-model="editingMember.national_id" required class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green font-mono font-bold" />
+                <input type="text" v-model="editingMember.national_id" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green font-mono font-bold" />
               </div>
               <div>
                 <label class="block font-semibold text-slate-700 mb-1">Date of Birth</label>
@@ -375,15 +432,15 @@ const triggerReopen = async () => {
               </div>
               <div>
                 <label class="block font-semibold text-slate-700 mb-1">Mobile Phone Number *</label>
-                <input type="tel" v-model="editingMember.phone" required class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green font-medium" />
+                <input type="tel" v-model="editingMember.phone" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green font-medium" />
               </div>
               <div>
                 <label class="block font-semibold text-slate-700 mb-1">Email Address *</label>
-                <input type="email" v-model="editingMember.email" required class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green font-medium" />
+                <input type="email" v-model="editingMember.email" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green font-medium" />
               </div>
               <div>
                 <label class="block font-semibold text-slate-700 mb-1">KRA PIN Number *</label>
-                <input type="text" v-model="editingMember.kra_pin" required class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green uppercase font-mono font-bold" />
+                <input type="text" v-model="editingMember.kra_pin" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-parliament-green uppercase font-mono font-bold" />
               </div>
               <div class="sm:col-span-3">
                 <label class="block font-semibold text-slate-700 mb-1">Postal Address</label>

@@ -11,7 +11,7 @@ from app.schemas.schemas import (
     MediaPhotoApprovalRequest, IctBiometricsRequest, SecurityClearanceRequest,
     HrFinanceClearanceRequest, MemberResponse
 )
-from app.api.deps import require_units, log_audit
+from app.api.deps import require_units, require_writer, log_audit
 from app.api.routes.desk import check_and_update_fully_cleared
 
 router = APIRouter(prefix="/clearance", tags=["Unit Clearance Stations"])
@@ -20,7 +20,7 @@ router = APIRouter(prefix="/clearance", tags=["Unit Clearance Stations"])
 def get_unit_queue(
     unit_name: str,
     status_filter: Optional[str] = "PENDING",  # PENDING or ALL
-    current_user: User = Depends(require_units(["MEDIA_RELATIONS", "ICT", "SECURITY", "HR_FINANCE", "CLERK_LP", "CLERK_OFFICE", "AUDITOR"])),
+    current_user: User = Depends(require_units(["MEDIA_RELATIONS", "ICT", "SECURITY", "HR_FINANCE", "CLERK_OFFICE", "AUDITOR"])),
     db: Session = Depends(get_db)
 ):
     unit = unit_name.upper()
@@ -59,6 +59,7 @@ async def process_media_photo(
     notes: Optional[str] = Form(None),
     replacement_photo: Optional[UploadFile] = File(None),
     current_user: User = Depends(require_units(["MEDIA_RELATIONS"])),
+    writer: User = Depends(require_writer),
     db: Session = Depends(get_db)
 ):
     member = db.query(Member).filter(Member.id == member_id).first()
@@ -105,6 +106,7 @@ def process_ict_biometrics(
     data: IctBiometricsRequest,
     request: Request,
     current_user: User = Depends(require_units(["ICT"])),
+    writer: User = Depends(require_writer),
     db: Session = Depends(get_db)
 ):
     member = db.query(Member).filter(Member.id == data.member_id).first()
@@ -144,6 +146,7 @@ async def process_security_clearance(
     notes: Optional[str] = Form(None),
     vetting_form: Optional[UploadFile] = File(None),
     current_user: User = Depends(require_units(["SECURITY"])),
+    writer: User = Depends(require_writer),
     db: Session = Depends(get_db)
 ):
     member = db.query(Member).filter(Member.id == member_id).first()
@@ -188,6 +191,7 @@ def process_hr_finance_clearance(
     data: HrFinanceClearanceRequest,
     request: Request,
     current_user: User = Depends(require_units(["HR_FINANCE"])),
+    writer: User = Depends(require_writer),
     db: Session = Depends(get_db)
 ):
     member = db.query(Member).filter(Member.id == data.member_id).first()

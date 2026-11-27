@@ -9,19 +9,25 @@ import {
 
 const auth = useAuthStore()
 
-// Strict departmental isolation: Admin sees all stations; department staff only see their station
-const isAdmin = computed(() => {
-  return auth.unit === 'SYSTEM_ADMIN' || auth.unit === 'CLERK_OFFICE' || auth.role === 'SUPER_USER'
-})
+// Admin sees every station and can act. Oversight can look, not tick.
+// A unit lead only sees and works their own station.
+const isSystemAdmin = computed(() => auth.unit === 'SYSTEM_ADMIN')
+const isOversight = computed(() => auth.unit === 'CLERK_OFFICE' || auth.unit === 'AUDITOR')
 
 const canAccessTab = (tab) => {
-  if (isAdmin.value) return true
+  if (isSystemAdmin.value || isOversight.value) return true
   if (tab === 'MEDIA' && auth.unit === 'MEDIA_RELATIONS') return true
   if (tab === 'ICT' && auth.unit === 'ICT') return true
   if (tab === 'SECURITY' && auth.unit === 'SECURITY') return true
   if (tab === 'HR_FINANCE' && ['HR_FINANCE', 'HR', 'FINANCE'].includes(auth.unit)) return true
   return false
 }
+
+const canAct = computed(() => {
+  if (auth.role === 'READ_ONLY' || isOversight.value) return false
+  if (isSystemAdmin.value) return true
+  return canAccessTab(activeTab.value)
+})
 
 // Active clearance tab
 const activeTab = ref('MEDIA') // MEDIA, ICT, SECURITY, HR_FINANCE
@@ -324,7 +330,7 @@ const filteredQueue = computed(() => {
               <th class="py-3 px-4">Member Name</th>
               <th class="py-3 px-4">Category</th>
               <th class="py-3 px-4">County / Seat</th>
-              <th class="py-3 px-4">Desk Checked In</th>
+              <th class="py-3 px-4">Onboarded</th>
               <th class="py-3 px-4">Current Unit Status</th>
               <th class="py-3 px-4 text-right">Action</th>
             </tr>
@@ -344,9 +350,9 @@ const filteredQueue = computed(() => {
               <td class="py-3 px-4">
                 <span v-if="m.desk_checked_in_at" class="text-blue-700 font-bold flex items-center space-x-1">
                   <CheckCircle2 class="w-3.5 h-3.5" />
-                  <span>Checked In</span>
+                  <span>Onboarded</span>
                 </span>
-                <span v-else class="text-slate-400 italic">Not checked in</span>
+                <span v-else class="text-slate-400 italic">Not onboarded</span>
               </td>
               <td class="py-3 px-4">
                 <!-- Media status -->
@@ -387,11 +393,13 @@ const filteredQueue = computed(() => {
               </td>
               <td class="py-3 px-4 text-right">
                 <button 
+                  v-if="canAct"
                   @click="openActionModal(m)"
                   class="px-3 py-1.5 rounded-lg bg-parliament-green hover:bg-parliament-green-dark text-white font-bold text-[11px] shadow-sm"
                 >
                   Manage Clearance
                 </button>
+                <span v-else class="text-[11px] font-semibold text-slate-400">View only</span>
               </td>
             </tr>
           </tbody>

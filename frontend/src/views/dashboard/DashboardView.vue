@@ -108,7 +108,7 @@ onMounted(() => {
         <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">4. Fully Cleared</div>
         <div class="text-3xl font-black text-emerald-800 mt-2">{{ stats.funnel.fully_cleared }}</div>
         <div class="text-[11px] text-emerald-700 font-bold mt-1">
-          <span>{{ stats.funnel.fully_cleared_pct }}% Cleared All 6 Units</span>
+          <span>{{ stats.funnel.fully_cleared_pct }}% cleared every station</span>
         </div>
         <div class="absolute right-4 top-4 w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
           <CheckCircle2 class="w-5 h-5" />
@@ -228,7 +228,7 @@ onMounted(() => {
         <h3 class="text-sm font-bold text-slate-900 pb-3 border-b border-slate-100 flex items-center justify-between">
           <span class="flex items-center space-x-1.5">
             <TrendingUp class="w-4 h-4 text-parliament-green" />
-            <span>14-Day Influx Trend (Online vs Physical Check-Ins)</span>
+            <span>14-Day Influx Trend (Online vs Onboarded)</span>
           </span>
           <span class="text-[11px] text-slate-400">Daily Trajectory</span>
         </h3>
@@ -254,7 +254,7 @@ onMounted(() => {
                 <div 
                   class="w-1/2 bg-parliament-green rounded-t transition-all hover:bg-parliament-green-dark" 
                   :style="{ height: `${Math.min(100, (day.desk / 40) * 100)}%` }"
-                  :title="`${day.date}: ${day.desk} Desk Check-ins`"
+                  :title="`${day.date}: ${day.desk} Onboarded`"
                 ></div>
               </div>
               <span class="text-[9px] text-slate-500 font-medium whitespace-nowrap">{{ day.date }}</span>
@@ -263,7 +263,7 @@ onMounted(() => {
           
           <div class="flex items-center justify-center space-x-6 text-xs text-slate-500 pt-3 border-t border-slate-100 mt-2">
             <div class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded bg-amber-400"></span><span>Online Pre-Registrations</span></div>
-            <div class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded bg-parliament-green"></span><span>Desk Physical Check-Ins</span></div>
+            <div class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded bg-parliament-green"></span><span>Onboarded</span></div>
           </div>
         </div>
       </div>

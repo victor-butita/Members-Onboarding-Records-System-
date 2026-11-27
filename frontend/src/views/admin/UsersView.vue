@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
 import {
@@ -7,6 +7,8 @@ import {
 } from 'lucide-vue-next'
 
 const auth = useAuthStore()
+const canAssignAnyDepartment = computed(() => auth.unit === 'SYSTEM_ADMIN' || auth.unit === 'ICT')
+const canMoveDepartment = computed(() => auth.unit === 'SYSTEM_ADMIN')
 const users = ref([])
 const isLoading = ref(true)
 
@@ -250,7 +252,7 @@ const handleResetPassword = async () => {
 
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Assigned Department / Unit *</label>
-            <select v-model="editUserData.unit" required class="w-full px-3 py-2 border rounded-xl outline-none bg-slate-50 font-medium">
+            <select v-model="editUserData.unit" required :disabled="!canMoveDepartment" class="w-full px-3 py-2 border rounded-xl outline-none bg-slate-50 font-medium disabled:bg-slate-100">
               <option value="CLERK_LP">Clerks (Legal & Parliamentary Affairs)</option>
               <option value="MEDIA_RELATIONS">Media Relations</option>
               <option value="ICT">ICT Directorate</option>
@@ -260,7 +262,9 @@ const handleResetPassword = async () => {
               <option value="AUDITOR">Internal Auditor</option>
               <option value="SYSTEM_ADMIN">System Administrator (Full All-Access)</option>
             </select>
-            <p class="text-[10px] text-slate-500 mt-1">Staff will be strictly isolated to this department's clearance work queue.</p>
+            <p class="text-[10px] text-slate-500 mt-1">
+              {{ canMoveDepartment ? "The System Administrator assigns each account to one department. That account can only do that department's work." : "Only the System Administrator can move this account to another department." }}
+            </p>
           </div>
 
           <div>
@@ -317,7 +321,7 @@ const handleResetPassword = async () => {
 
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Department / Unit *</label>
-            <select v-model="newUser.unit" class="w-full px-3 py-2 border rounded-xl outline-none bg-slate-50 font-medium">
+            <select v-model="newUser.unit" :disabled="!canAssignAnyDepartment" class="w-full px-3 py-2 border rounded-xl outline-none bg-slate-50 font-medium disabled:bg-slate-100">
               <option value="CLERK_LP">Clerks (Legal & Parliamentary Affairs)</option>
               <option value="MEDIA_RELATIONS">Media Relations</option>
               <option value="ICT">ICT Directorate</option>

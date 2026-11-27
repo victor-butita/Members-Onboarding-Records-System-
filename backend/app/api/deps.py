@@ -37,6 +37,14 @@ def require_units(allowed_units: List[str]):
         )
     return checker
 
+def require_writer(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role == "READ_ONLY" or current_user.unit in ["CLERK_OFFICE", "AUDITOR"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="This account can view records only and cannot change another department's work."
+        )
+    return current_user
+
 def require_super_user(current_user: User = Depends(get_current_user)) -> User:
     if current_user.unit == "SYSTEM_ADMIN" or current_user.role == "SUPER_USER":
         return current_user

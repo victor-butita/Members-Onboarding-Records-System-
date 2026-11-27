@@ -83,6 +83,11 @@ def update_user(
         raise HTTPException(status_code=403, detail="Cannot edit users outside your unit.")
         
     update_data = data.dict(exclude_unset=True)
+    if "unit" in update_data and update_data["unit"] != target_user.unit and current_user.unit != "SYSTEM_ADMIN":
+        raise HTTPException(
+            status_code=403,
+            detail="Only the System Administrator can move a staff account to another department."
+        )
     for field, val in update_data.items():
         setattr(target_user, field, val)
         

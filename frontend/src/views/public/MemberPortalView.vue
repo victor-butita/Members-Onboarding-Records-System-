@@ -197,7 +197,7 @@ const restartForm = () => {
           </div>
           <div>
             <div class="text-[11px] font-extrabold text-parliament-gold tracking-widest uppercase">Republic of Kenya</div>
-            <h1 class="text-base font-extrabold leading-tight">The National Assembly</h1>
+            <h1 class="font-serif text-lg leading-tight">The National Assembly</h1>
             <p class="text-xs text-emerald-100">Members' Onboarding & Records System (MORS)</p>
           </div>
         </div>

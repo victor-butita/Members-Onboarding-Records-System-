@@ -112,6 +112,36 @@ TABLE_HEADER_PATTERNS = [
     r"MARGIN\s+OF\s+VOTES"
 ]
 
+def is_prose_or_legal_line(line: str) -> bool:
+    """Skip narrative, signatures and statutory text that is not a member row."""
+    words = line.split()
+    if len(words) > 16:
+        return True
+    lowered = line.lower()
+    markers = (
+        "conferred", "pursuant", "whereas", "published by", "in exercise",
+        "constitution of kenya", "elections act", "it is notified",
+        "government printer", "special issue", "price ksh", "price sh",
+        "declaration of persons", "returning officer", "chairperson",
+        "commission secretary", "chief executive", "dated the",
+        "printed and published", "corrigenda", "special category",
+    )
+    return any(marker in lowered for marker in markers)
+
+def looks_like_person_token(value: str) -> bool:
+    cleaned = re.sub(r"^[0-9\.\)\-\s]+", "", (value or "")).strip()
+    if len(cleaned) < 2 or len(cleaned) > 40:
+        return False
+    if not re.match(r"^[A-Za-z][A-Za-z' .\-]*$", cleaned):
+        return False
+    blocked = {
+        "DATE", "TOTAL", "VOTES", "REMARKS", "STAGE", "NOTICE", "GAZETTE",
+        "COUNTY", "CONSTITUENCY", "MEMBER", "MEMBERS", "ELECTED", "NATIONAL",
+        "ASSEMBLY", "PARTY", "PAGE", "VOL", "THE", "AND", "FOR", "FROM",
+        "CODE", "NAME", "SURNAME", "OTHER", "NAMES", "POLITICAL",
+    }
+    return cleaned.upper() not in blocked
+
 def is_ignorable_gazette_line(line: str) -> bool:
     line_upper = line.strip().upper()
     if not line_upper or len(line_upper) < 3:
@@ -157,7 +187,7 @@ def parse_gazette_pdf(file_bytes: bytes) -> Tuple[List[MemberGazetteItem], List[
                     continue
                 
                 # Filter out preamble, headers, signatures, legal boilerplate
-                if is_ignorable_gazette_line(l_str):
+                if is_ignorable_gazette_line(l_str) or is_prose_or_legal_line(l_str):
                     continue
                 
                 # Split table line by 2 or more spaces, tabs, or pipes
@@ -213,10 +243,8 @@ def parse_gazette_pdf(file_bytes: bytes) -> Tuple[List[MemberGazetteItem], List[
                     other = re.sub(r"^[0-9\.\-\)\s]+", "", other).strip()
                     party = party.strip()
                     
-                    # Sanity check: must look like a person's name (letters, min length)
-                    if len(surname) >= 2 and len(other) >= 2 and not surname.isdigit():
-                        # Exclude any stray uppercase titles like 'DATE', 'VOTES', 'TOTAL'
-                        if surname.upper() not in ["DATE", "TOTAL", "VOTES", "REMARKS", "STAGE"]:
+                    # Sanity check: must look like a person's name, not a heading or legal line
+                    if looks_like_person_token(surname) and looks_like_person_token(other):
                             full_name = f"{surname} {other}".strip()
                             dedup_key = f"{full_name.lower()}_{current_cat}"
                             if dedup_key not in seen_keys:
@@ -239,6 +267,8 @@ def parse_gazette_pdf(file_bytes: bytes) -> Tuple[List[MemberGazetteItem], List[
                         seat = match.group(3).strip()
                         party = match.group(4).strip()
                         full_name = f"{surname} {other}".strip()
+                        if not (looks_like_person_token(surname) and looks_like_person_token(other)):
+                            continue
                         
                         dedup_key = f"{full_name.lower()}_{current_cat}"
                         if dedup_key not in seen_keys:
@@ -327,6 +357,10 @@ def preview_gazette(items: List[MemberGazetteItem], warnings: List[str]) -> Gaze
         warnings.append(f"County Woman Representatives: found {count_cwr}, expected 47.")
     if count_nom != 12:
         warnings.append(f"Nominated Members: found {count_nom}, expected 12.")
+    if len(items) == 0:
+        warnings.append(
+            "No elected members were recognised. Scanned picture-only PDFs cannot be read; upload the Excel version of the notice."
+        )
         
     return GazettePreviewResponse(
         total_parsed=len(items),
@@ -337,6 +371,7 @@ def preview_gazette(items: List[MemberGazetteItem], warnings: List[str]) -> Gaze
         target_woman_rep=47,
         target_nominated=12,
         is_counts_valid=is_valid,
+        records=items,
         sample_records=items[:15],
         warnings=warnings
     )

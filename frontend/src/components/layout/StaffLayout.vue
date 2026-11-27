@@ -5,6 +5,7 @@ import Navbar from '@/components/layout/Navbar.vue'
 import Sidebar from '@/components/layout/Sidebar.vue'
 
 const auth = useAuthStore()
+const sidebarOpen = ref(false)
 const currentPassword = ref('')
 const newPassword = ref('')
 const confirmPassword = ref('')
@@ -33,13 +34,15 @@ const handleForcePasswordChange = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50 flex flex-col font-sans">
-    <Navbar />
+  <div class="h-screen overflow-hidden bg-[#f4f6f2] flex flex-col font-sans">
+    <Navbar @toggle-menu="sidebarOpen = !sidebarOpen" />
 
-    <div class="flex flex-1">
-      <Sidebar />
-      <main class="flex-1 p-6 max-w-7xl overflow-x-hidden">
-        <router-view />
+    <div class="flex flex-1 min-h-0">
+      <Sidebar :open="sidebarOpen" @close="sidebarOpen = false" />
+      <main class="flex-1 min-w-0 overflow-y-auto px-4 py-6 sm:px-7 lg:px-9">
+        <div class="max-w-[1240px] mx-auto">
+          <router-view />
+        </div>
       </main>
     </div>
 

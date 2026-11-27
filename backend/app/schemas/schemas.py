@@ -64,6 +64,7 @@ class GazettePreviewResponse(BaseModel):
     target_woman_rep: int = 47
     target_nominated: int = 12
     is_counts_valid: bool
+    records: List[MemberGazetteItem] = []
     sample_records: List[MemberGazetteItem]
     warnings: List[str] = []
 
@@ -71,6 +72,8 @@ class GazetteCommitRequest(BaseModel):
     items: List[MemberGazetteItem]
     gazette_notice_no: str
     replace_existing_seats: bool = True
+    supersede_missing: bool = False
+    confirm_partial_overwrite: bool = False
 
 class MemberPortalLookupItem(BaseModel):
     id: int

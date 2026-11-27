@@ -13,6 +13,9 @@ const isPreviewing = ref(false)
 const isCommitting = ref(false)
 const error = ref('')
 const commitSuccess = ref('')
+const replaceExistingSeats = ref(true)
+const supersedeMissing = ref(false)
+const confirmPartialOverwrite = ref(false)
 
 const handleFileSelect = (e) => {
   selectedFile.value = e.target.files[0] || null
@@ -41,19 +44,49 @@ const previewGazette = async () => {
   }
 }
 
+const parsedRecords = () => previewData.value?.records?.length
+  ? previewData.value.records
+  : (previewData.value?.sample_records || [])
+
+const needsPartialConfirm = () => supersedeMissing.value && parsedRecords().length > 0 && parsedRecords().length < 200
+
+const recountPreview = () => {
+  if (!previewData.value) return
+  const rows = parsedRecords()
+  previewData.value.count_mp = rows.filter((r) => r.category === 'MP').length
+  previewData.value.count_woman_rep = rows.filter((r) => r.category === 'WOMAN_REP').length
+  previewData.value.count_nominated = rows.filter((r) => r.category === 'NOMINATED').length
+  previewData.value.total_parsed = rows.length
+  previewData.value.is_counts_valid = (
+    previewData.value.count_mp === 290
+    && previewData.value.count_woman_rep === 47
+    && previewData.value.count_nominated === 12
+  )
+}
+
 const commitGazette = async () => {
-  if (!previewData.value || !gazetteNoticeNo.value) return
+  const items = parsedRecords()
+  if (!items.length || !gazetteNoticeNo.value) return
+  if (needsPartialConfirm() && !confirmPartialOverwrite.value) {
+    error.value = 'This notice is smaller than a full House. Confirm that members not listed should be superseded.'
+    return
+  }
   isCommitting.value = true
   error.value = ''
   commitSuccess.value = ''
 
   try {
     const res = await api.post('/gazette/commit', {
-      items: previewData.value.sample_records, // or all parsed records
+      items,
       gazette_notice_no: gazetteNoticeNo.value,
-      replace_existing_seats: true
+      replace_existing_seats: replaceExistingSeats.value,
+      supersede_missing: supersedeMissing.value,
+      confirm_partial_overwrite: confirmPartialOverwrite.value
     })
-    commitSuccess.value = res.data.message
+    const data = res.data
+    commitSuccess.value = `${data.message} Imported ${data.imported}, updated ${data.updated}, seats replaced ${data.replaced}, superseded ${data.superseded}. Active register: ${data.total_active}.`
+    previewData.value = null
+    selectedFile.value = null
   } catch (err) {
     error.value = err.response?.data?.detail || 'Failed to commit gazette records.'
   } finally {
@@ -185,10 +218,12 @@ const downloadTemplate = () => {
 
       <!-- Sample Extracted Records Grid -->
       <div>
-        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">Sample Parsed Members (Review Before Import)</h4>
-        <div class="border border-slate-200 rounded-xl overflow-x-auto">
+        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+          Extracted members ({{ previewData.total_parsed }}). Correct a category before import. Preamble and other notice text is ignored.
+        </h4>
+        <div class="border border-slate-200 rounded-xl overflow-auto max-h-96">
           <table class="w-full text-left text-xs divide-y divide-slate-100">
-            <thead class="bg-slate-50 text-slate-600 font-bold">
+            <thead class="bg-slate-50 text-slate-600 font-bold sticky top-0">
               <tr>
                 <th class="py-2.5 px-3">Surname</th>
                 <th class="py-2.5 px-3">Other Names</th>
@@ -199,10 +234,16 @@ const downloadTemplate = () => {
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-slate-700">
-              <tr v-for="(rec, idx) in previewData.sample_records" :key="idx" class="hover:bg-slate-50">
+              <tr v-for="(rec, idx) in (previewData.records || previewData.sample_records)" :key="idx" class="hover:bg-slate-50">
                 <td class="py-2 px-3 font-bold text-slate-900">{{ rec.surname }}</td>
                 <td class="py-2 px-3">{{ rec.other_names }}</td>
-                <td class="py-2 px-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100">{{ rec.category }}</span></td>
+                <td class="py-2 px-3">
+                  <select v-model="rec.category" @change="recountPreview" class="px-2 py-1 border rounded-lg bg-white text-[11px] font-bold">
+                    <option value="MP">MP</option>
+                    <option value="WOMAN_REP">WOMAN_REP</option>
+                    <option value="NOMINATED">NOMINATED</option>
+                  </select>
+                </td>
                 <td class="py-2 px-3">{{ rec.county || '—' }}</td>
                 <td class="py-2 px-3">{{ rec.constituency || '—' }}</td>
                 <td class="py-2 px-3 font-medium">{{ rec.party }}</td>
@@ -212,18 +253,43 @@ const downloadTemplate = () => {
         </div>
       </div>
 
+      <!-- Overwrite options -->
+      <div class="space-y-2 text-xs">
+        <label class="flex items-start space-x-2.5 p-3 rounded-xl border border-slate-200 cursor-pointer">
+          <input type="checkbox" v-model="replaceExistingSeats" class="mt-0.5" />
+          <span>
+            <span class="font-bold text-slate-900 block">Overwrite matching seats</span>
+            <span class="text-slate-500">The uploaded notice replaces gazette particulars for the same constituency, county or nominated member. The same person keeps biodata already captured. A different person on that seat supersedes the previous holder.</span>
+          </span>
+        </label>
+        <label class="flex items-start space-x-2.5 p-3 rounded-xl border border-amber-200 bg-amber-50/60 cursor-pointer">
+          <input type="checkbox" v-model="supersedeMissing" class="mt-0.5" />
+          <span>
+            <span class="font-bold text-slate-900 block">Supersede members who are not in this notice</span>
+            <span class="text-slate-600">Use this when the file is the full new gazette and everyone left off it should leave the active register. Records are kept; they are not deleted.</span>
+          </span>
+        </label>
+        <label v-if="needsPartialConfirm()" class="flex items-start space-x-2.5 p-3 rounded-xl border border-red-200 bg-red-50 cursor-pointer">
+          <input type="checkbox" v-model="confirmPartialOverwrite" class="mt-0.5" />
+          <span>
+            <span class="font-bold text-red-900 block">Confirm partial overwrite</span>
+            <span class="text-red-800">This notice has fewer than 200 members. Confirm that the rest of the active register should be marked superseded.</span>
+          </span>
+        </label>
+      </div>
+
       <!-- Commit Action -->
       <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div class="text-xs text-slate-500">
-          Corrigenda Rule: Committing will automatically update existing seats or add new by-election winners.
+          {{ previewData.total_parsed }} members will be written. Upload the same notice again to overwrite these seats.
         </div>
         <button 
           @click="commitGazette"
-          :disabled="isCommitting"
+          :disabled="isCommitting || !(previewData.records || previewData.sample_records || []).length"
           class="px-6 py-2.5 rounded-xl bg-parliament-green hover:bg-parliament-green-dark text-white font-bold text-xs shadow-md transition-all flex items-center space-x-1.5 disabled:opacity-50"
         >
           <RefreshCw v-if="isCommitting" class="w-3.5 h-3.5 animate-spin" />
-          <span>{{ isCommitting ? 'Importing Official Gazette...' : 'Commit to Official Member Register' }}</span>
+          <span>{{ isCommitting ? 'Overwriting official register...' : 'Upload and overwrite gazette' }}</span>
         </button>
       </div>
 

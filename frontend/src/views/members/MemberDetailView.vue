@@ -96,10 +96,10 @@ onMounted(() => {
         <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Unit Clearance Checklist</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
           
-          <!-- 1. Clerks L&P -->
+          <!-- 1. Clerks L&P documents -->
           <div class="p-3.5 rounded-xl border" :class="data.member.original_docs_verified ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
             <div class="flex items-center justify-between font-bold">
-              <span>1. Original Documents (L&P)</span>
+              <span>1. Physical Documents (L&P)</span>
               <CheckCircle2 v-if="data.member.original_docs_verified" class="w-4 h-4 text-emerald-600" />
               <Clock v-else class="w-4 h-4 text-slate-400" />
             </div>
@@ -108,10 +108,22 @@ onMounted(() => {
             </div>
           </div>
 
-          <!-- 2. Media Relations -->
+          <!-- 2. Biodata -->
+          <div class="p-3.5 rounded-xl border" :class="data.member.biodata_confirmed ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
+            <div class="flex items-center justify-between font-bold">
+              <span>2. Biodata Confirmation (L&P)</span>
+              <CheckCircle2 v-if="data.member.biodata_confirmed" class="w-4 h-4 text-emerald-600" />
+              <Clock v-else class="w-4 h-4 text-slate-400" />
+            </div>
+            <div class="text-[11px] text-slate-500 mt-1">
+              {{ data.member.biodata_confirmed ? `Confirmed by ${data.member.biodata_confirmed_by}` : 'Pending bio data confirmation' }}
+            </div>
+          </div>
+
+          <!-- 3. Media Relations -->
           <div class="p-3.5 rounded-xl border" :class="data.member.photo_approved ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
             <div class="flex items-center justify-between font-bold">
-              <span>2. Media Relations (Photo)</span>
+              <span>3. Media Relations (Photo)</span>
               <CheckCircle2 v-if="data.member.photo_approved" class="w-4 h-4 text-emerald-600" />
               <Clock v-else class="w-4 h-4 text-slate-400" />
             </div>
@@ -123,7 +135,7 @@ onMounted(() => {
           <!-- 3. ICT -->
           <div class="p-3.5 rounded-xl border" :class="data.member.biometrics_collected ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
             <div class="flex items-center justify-between font-bold">
-              <span>3. ICT (Chamber Biometrics)</span>
+              <span>4. ICT (Chamber Biometrics)</span>
               <CheckCircle2 v-if="data.member.biometrics_collected" class="w-4 h-4 text-emerald-600" />
               <Clock v-else class="w-4 h-4 text-slate-400" />
             </div>
@@ -135,7 +147,7 @@ onMounted(() => {
           <!-- 4. Security -->
           <div class="p-3.5 rounded-xl border" :class="data.member.security_cleared ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
             <div class="flex items-center justify-between font-bold">
-              <span>4. Parliamentary Security</span>
+              <span>5. Parliamentary Security</span>
               <CheckCircle2 v-if="data.member.security_cleared" class="w-4 h-4 text-emerald-600" />
               <Clock v-else class="w-4 h-4 text-slate-400" />
             </div>
@@ -147,24 +159,12 @@ onMounted(() => {
           <!-- 5. HR & Finance -->
           <div class="p-3.5 rounded-xl border" :class="data.member.hr_verified && data.member.finance_verified ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
             <div class="flex items-center justify-between font-bold">
-              <span>5. HR & Finance Records</span>
+              <span>6. HR & Finance Records</span>
               <CheckCircle2 v-if="data.member.hr_verified && data.member.finance_verified" class="w-4 h-4 text-emerald-600" />
               <Clock v-else class="w-4 h-4 text-slate-400" />
             </div>
             <div class="text-[11px] text-slate-500 mt-1">
               {{ data.member.finance_verified ? `${data.member.bank_name || 'Bank'} Enrolled` : 'Pending Bank & SHA Verification' }}
-            </div>
-          </div>
-
-          <!-- 6. Oath & Assets -->
-          <div class="p-3.5 rounded-xl border" :class="data.member.oath_recorded && data.member.assets_declaration_filed ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'">
-            <div class="flex items-center justify-between font-bold">
-              <span>6. Oath & Assets Declaration</span>
-              <CheckCircle2 v-if="data.member.oath_recorded && data.member.assets_declaration_filed" class="w-4 h-4 text-emerald-600" />
-              <Clock v-else class="w-4 h-4 text-slate-400" />
-            </div>
-            <div class="text-[11px] text-slate-500 mt-1">
-              {{ data.member.oath_recorded ? 'Oath Signed & Assets Sealed' : 'Pending Formal Swearing-In' }}
             </div>
           </div>
 

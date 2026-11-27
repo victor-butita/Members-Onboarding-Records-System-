@@ -27,25 +27,38 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
-    <!-- Background styling -->
-    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#CBA135_1px,transparent_1px)] [background-size:16px_16px]"></div>
-    
+  <div class="min-h-screen bg-[#0c2418] lg:grid lg:grid-cols-[1.1fr_0.9fr]">
+    <section class="hidden lg:flex flex-col justify-between p-12 text-white border-r border-white/10">
+      <div>
+        <div class="text-[11px] font-semibold tracking-[0.2em] uppercase text-parliament-gold">Republic of Kenya</div>
+        <h1 class="font-serif text-4xl mt-4 leading-tight">The National Assembly</h1>
+        <p class="mt-4 text-emerald-100/80 max-w-md text-sm leading-relaxed">
+          One register for the 14th Parliament. Gazette the House, let Members submit their particulars, then verify and clear each department in turn.
+        </p>
+      </div>
+      <ol class="space-y-3 text-sm text-emerald-50/90">
+        <li class="flex gap-3"><span class="text-parliament-gold font-semibold">01</span> Upload the gazette notice</li>
+        <li class="flex gap-3"><span class="text-parliament-gold font-semibold">02</span> Members complete the public portal</li>
+        <li class="flex gap-3"><span class="text-parliament-gold font-semibold">03</span> Clerks verify documents and biodata</li>
+        <li class="flex gap-3"><span class="text-parliament-gold font-semibold">04</span> Each department clears only its own station</li>
+      </ol>
+    </section>
+
+    <div class="flex flex-col justify-center py-12 px-6 relative">
     <div class="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-      <!-- Republic of Kenya Header -->
-      <div class="text-center">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-parliament-green border-2 border-parliament-gold shadow-xl mb-3">
-          <Building2 class="w-9 h-9 text-parliament-gold" />
+      <div class="text-center lg:text-left mb-2 lg:hidden">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#0c3d24] border border-parliament-gold mb-3">
+          <Building2 class="w-7 h-7 text-parliament-gold" />
         </div>
         <div class="text-[11px] font-bold tracking-widest text-parliament-gold uppercase">Republic of Kenya</div>
-        <h1 class="text-xl font-extrabold text-white tracking-tight">The National Assembly</h1>
-        <p class="mt-1 text-xs text-slate-400">Members' Onboarding & Records System (MORS)</p>
+        <h1 class="font-serif text-2xl text-white">The National Assembly</h1>
+        <p class="mt-1 text-xs text-emerald-100/70">Members' Onboarding & Records System</p>
       </div>
 
       <!-- Login Card -->
       <div class="mt-8 bg-white py-8 px-6 shadow-2xl rounded-2xl sm:px-10 border border-slate-100">
         <div class="border-b border-slate-100 pb-4 mb-6">
-          <h2 class="text-base font-bold text-slate-900">Staff Portal Sign-In</h2>
+          <h2 class="font-serif text-2xl text-slate-900">Staff sign in</h2>
           <p class="text-xs text-slate-500 mt-0.5">Authenticate with your assigned departmental email and password.</p>
         </div>
 
@@ -106,6 +119,7 @@ const handleLogin = async () => {
         </div>
 
       </div>
+    </div>
     </div>
   </div>
 </template>

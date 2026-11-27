@@ -210,16 +210,15 @@ const exportCsv = () => {
 
       <!-- 4. PHYSICAL ONBOARDING REPORT -->
       <div v-else-if="selectedReport === 'physical_onboarding' && reportData" class="space-y-4 text-xs">
-        <div class="text-slate-500">Checked In at Desk: {{ reportData.total }} Members</div>
+        <div class="text-slate-500">Onboarded at the registration desk: {{ reportData.total }} Members</div>
         <table class="w-full text-left divide-y divide-slate-200 border">
           <thead class="bg-slate-50 font-bold text-slate-700">
             <tr>
               <th class="py-2 px-3">Member Name</th>
               <th class="py-2 px-3">Checked In Timestamp</th>
               <th class="py-2 px-3">Verifying Officer (Clerk)</th>
-              <th class="py-2 px-3">Original Docs Verified</th>
-              <th class="py-2 px-3">Oath Recorded</th>
-              <th class="py-2 px-3">Assets Filed</th>
+              <th class="py-2 px-3">Physical Documents</th>
+              <th class="py-2 px-3">Biodata Confirmed</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
@@ -228,8 +227,7 @@ const exportCsv = () => {
               <td class="py-1.5 px-3 font-mono">{{ r.checked_in_at }}</td>
               <td class="py-1.5 px-3">{{ r.checked_in_by }}</td>
               <td class="py-1.5 px-3">{{ r.original_docs_verified ? '✓ Verified' : 'Pending' }}</td>
-              <td class="py-1.5 px-3">{{ r.oath_recorded ? '✓ Administered' : 'Pending' }}</td>
-              <td class="py-1.5 px-3">{{ r.assets_declaration_filed ? '✓ Received' : 'Pending' }}</td>
+              <td class="py-1.5 px-3">{{ r.biodata_confirmed ? '✓ Confirmed' : 'Pending' }}</td>
             </tr>
           </tbody>
         </table>

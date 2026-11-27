@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.models import Member, User, ClearanceLog, utcnow
 from app.schemas.schemas import DeskCheckinRequest, VerifyOriginalsRequest, MemberResponse, ReopenSubmissionRequest
-from app.api.deps import require_units, get_current_user, log_audit
+from app.api.deps import require_units, require_writer, log_audit
 
 router = APIRouter(prefix="/desk", tags=["Registration Desk (Clerks L&P)"])
 
@@ -35,6 +35,7 @@ def check_in_member(
     data: DeskCheckinRequest,
     request: Request,
     current_user: User = Depends(require_units(["CLERK_LP"])),
+    writer: User = Depends(require_writer),
     db: Session = Depends(get_db)
 ):
     member = db.query(Member).filter(Member.id == data.member_id).first()
@@ -70,6 +71,7 @@ def verify_original_documents(
     data: VerifyOriginalsRequest,
     request: Request,
     current_user: User = Depends(require_units(["CLERK_LP"])),
+    writer: User = Depends(require_writer),
     db: Session = Depends(get_db)
 ):
     member = db.query(Member).filter(Member.id == data.member_id).first()
@@ -84,30 +86,25 @@ def verify_original_documents(
     member.biodata_confirmed = data.biodata_confirmed
     member.biodata_confirmed_by = current_user.full_name
     member.biodata_confirmed_at = now
-    
-    if data.oath_recorded:
-        member.oath_recorded = True
-        member.oath_recorded_by = current_user.full_name
-        member.oath_recorded_at = now
-        
-    if data.assets_declaration_filed:
-        member.assets_declaration_filed = True
-        member.assets_declaration_filed_by = current_user.full_name
-        member.assets_declaration_filed_at = now
+
+    if data.verified and data.biodata_confirmed and member.stage != "FULLY_CLEARED":
+        member.stage = "DESK_CHECKED_IN"
+        if not member.desk_checked_in_at:
+            member.desk_checked_in_at = now
+            member.desk_checked_in_by = current_user.full_name
         
     if data.notes:
         member.notes = f"{member.notes or ''}\n[L&P Verification Note]: {data.notes}".strip()
         
-    # Check if all 6 units are complete to advance stage to FULLY_CLEARED
     check_and_update_fully_cleared(member)
     
     log_entry = ClearanceLog(
         member_id=member.id,
-        step="Original Documents & Biodata Verification",
+        step="Physical Documents & Biodata Confirmation",
         unit="CLERK_LP",
         completed_by_id=current_user.id,
         completed_by_name=current_user.full_name,
-        remarks=f"Original docs verified: {data.verified}, Oath: {data.oath_recorded}, Assets: {data.assets_declaration_filed}",
+        remarks=f"Physical documents verified: {data.verified}, Biodata confirmed: {data.biodata_confirmed}",
         timestamp=now
     )
     db.add(log_entry)
@@ -121,6 +118,7 @@ def reopen_submission_for_correction(
     data: ReopenSubmissionRequest,
     request: Request,
     current_user: User = Depends(require_units(["CLERK_LP"])),
+    writer: User = Depends(require_writer),
     db: Session = Depends(get_db)
 ):
     member = db.query(Member).filter(Member.id == data.member_id).first()

@@ -5,7 +5,7 @@ from sqlalchemy import or_
 from app.core.database import get_db
 from app.models.models import Member, User, ClearanceLog, utcnow
 from app.schemas.schemas import MemberResponse, MemberUpdateRequest
-from app.api.deps import get_current_user, require_units, log_audit
+from app.api.deps import get_current_user, require_units, require_writer, log_audit
 
 router = APIRouter(prefix="/members", tags=["Members Directory"])
 
@@ -80,15 +80,22 @@ def update_member_details(
     member_id: int,
     data: MemberUpdateRequest,
     request: Request,
-    current_user: User = Depends(require_units(["CLERK_LP", "ICT"])),
+    current_user: User = Depends(require_units(["CLERK_LP", "ICT", "SYSTEM_ADMIN"])),
+    writer: User = Depends(require_writer),
     db: Session = Depends(get_db)
 ):
     member = db.query(Member).filter(Member.id == member_id).first()
     if not member:
         raise HTTPException(status_code=404, detail="Member not found.")
         
+    blankable = {
+        "national_id", "email", "phone", "kra_pin", "postal_address",
+        "pa_email", "next_of_kin_email", "qualifications", "notes",
+    }
     update_dict = data.dict(exclude_unset=True)
     for field, val in update_dict.items():
+        if isinstance(val, str) and not val.strip() and field in blankable:
+            val = None
         setattr(member, field, val)
         
     # Re-calculate full_name if surname or other_names changed
@@ -107,7 +114,8 @@ def update_member_status(
     status: str,
     reason: str,
     request: Request,
-    current_user: User = Depends(require_units(["CLERK_LP", "ICT"])),
+    current_user: User = Depends(require_units(["CLERK_LP", "ICT", "SYSTEM_ADMIN"])),
+    writer: User = Depends(require_writer),
     db: Session = Depends(get_db)
 ):
     member = db.query(Member).filter(Member.id == member_id).first()

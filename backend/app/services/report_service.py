@@ -82,8 +82,7 @@ def get_report_data(db: Session, report_type: str, category_filter: str = None, 
                 "checked_in_at": m.desk_checked_in_at.strftime("%Y-%m-%d %H:%M") if m.desk_checked_in_at else "",
                 "checked_in_by": m.desk_checked_in_by or "Clerks L&P",
                 "original_docs_verified": m.original_docs_verified,
-                "oath_recorded": m.oath_recorded,
-                "assets_declaration_filed": m.assets_declaration_filed,
+                "biodata_confirmed": m.biodata_confirmed,
                 "stage": m.stage
             })
         return {"title": "Physical Onboarding & Verification Report", "total": len(rows), "records": rows}
@@ -92,7 +91,8 @@ def get_report_data(db: Session, report_type: str, category_filter: str = None, 
         rows = []
         for m in members:
             pending_units = []
-            if not m.original_docs_verified: pending_units.append("Clerks (L&P)")
+            if not m.original_docs_verified or not m.biodata_confirmed:
+                pending_units.append("Clerks (L&P)")
             if not m.photo_approved: pending_units.append("Media Relations")
             if not m.biometrics_collected: pending_units.append("ICT")
             if not m.security_cleared: pending_units.append("Security")
