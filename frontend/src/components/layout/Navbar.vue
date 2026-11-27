@@ -70,9 +70,11 @@ const handlePasswordChange = async () => {
         </button>
 
         <div class="flex items-center gap-3 min-w-0">
-          <div class="w-10 h-10 rounded-full border border-parliament-gold/80 bg-[#082e1b] flex items-center justify-center shrink-0">
-            <span class="font-serif text-[13px] font-semibold text-parliament-gold tracking-wide">NA</span>
-          </div>
+          <img
+            src="/brand/national-assembly-logo.png"
+            alt="The National Assembly"
+            class="h-10 w-10 shrink-0 rounded-full bg-white object-cover"
+          />
           <div class="min-w-0">
             <div class="flex items-center gap-2">
               <span class="font-serif text-[17px] leading-none text-white">MORS</span>

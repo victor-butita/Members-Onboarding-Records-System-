@@ -2,7 +2,7 @@
 import { ref, onMounted, computed } from 'vue'
 import api from '@/services/api'
 import {
-  Building2, Search, User, ShieldCheck, CheckCircle2, AlertCircle,
+  Search, User, ShieldCheck, CheckCircle2, AlertCircle,
   Upload, FileText, Printer, ArrowRight, ArrowLeft, RefreshCw, Phone, Mail
 } from 'lucide-vue-next'
 
@@ -192,9 +192,11 @@ const restartForm = () => {
     <header class="bg-parliament-green text-white border-b-4 border-parliament-gold shadow-md no-print">
       <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div class="flex items-center space-x-3 text-center sm:text-left">
-          <div class="w-12 h-12 rounded-full bg-white/10 border-2 border-parliament-gold flex items-center justify-center p-2 shadow-inner">
-            <Building2 class="w-7 h-7 text-parliament-gold" />
-          </div>
+          <img
+            src="/brand/national-assembly-logo.png"
+            alt="The National Assembly of the Republic of Kenya"
+            class="h-14 w-14 rounded-full bg-white object-cover shadow-md"
+          />
           <div>
             <div class="text-[11px] font-extrabold text-parliament-gold tracking-widest uppercase">Republic of Kenya</div>
             <h1 class="font-serif text-lg leading-tight">The National Assembly</h1>
@@ -258,15 +260,22 @@ const restartForm = () => {
       </div>
 
       <!-- STEP 1: Search Gazette Name -->
-      <div v-if="currentStep === 1" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
-        <div class="text-center max-w-lg mx-auto mb-6">
-          <h2 class="text-xl font-extrabold text-slate-900">Member Pre-Registration</h2>
-          <p class="text-xs text-slate-600 mt-1">
-            Please enter your name exactly as published in the official IEBC Gazette Notice for the 14th Parliament.
+      <div v-if="currentStep === 1" class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-card">
+        <div class="border-b border-[#efe8d8] bg-[#fbf8f1] px-6 py-8 text-center sm:px-10">
+          <img
+            src="/brand/national-assembly-logo.png"
+            alt=""
+            class="mx-auto mb-4 h-20 w-20 rounded-full bg-white object-cover shadow-sm"
+          />
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-parliament-gold-dark">14th Parliament</div>
+          <h2 class="mt-1 font-serif text-3xl text-slate-900">Find your gazette name</h2>
+          <p class="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-600">
+            Search the name exactly as it appears in the IEBC gazette notice. Scans can wait. Physical documents are checked at the registration desk.
           </p>
         </div>
 
-        <div class="max-w-lg mx-auto">
+        <div class="px-6 py-6 sm:px-10">
+        <div class="mx-auto max-w-xl">
           <div class="relative flex items-center">
             <input 
               type="text" 
@@ -320,12 +329,20 @@ const restartForm = () => {
           </div>
         </div>
 
-        <!-- Safeguard Note -->
-        <div class="mt-8 pt-6 border-t border-slate-100 flex items-start space-x-3 text-xs text-slate-500">
-          <ShieldCheck class="w-5 h-5 text-parliament-gold flex-shrink-0 mt-0.5" />
-          <p>
-            <strong>Official Safeguard:</strong> Only persons gazetted by the Independent Electoral and Boundaries Commission (IEBC) can be onboarded into MORS. Physical documents will be cross-verified at the registration desk.
-          </p>
+        <div class="mt-6 grid gap-3 sm:grid-cols-3 text-xs">
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+            <div class="font-semibold text-slate-900">1. Gazette name</div>
+            <p class="mt-1 text-slate-500">County, constituency and party stay as published.</p>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+            <div class="font-semibold text-slate-900">2. Your particulars</div>
+            <p class="mt-1 text-slate-500">Personal email and personal assistant. No official email yet.</p>
+          </div>
+          <div class="rounded-2xl border border-amber-200 bg-amber-50 p-3">
+            <div class="font-semibold text-amber-950">3. Notice</div>
+            <p class="mt-1 text-amber-900">Physical verification of documents is mandatory.</p>
+          </div>
+        </div>
         </div>
       </div>
 
