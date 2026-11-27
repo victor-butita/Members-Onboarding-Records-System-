@@ -149,14 +149,14 @@ onMounted(() => {
       
       <!-- Unit Clearance Progress -->
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-        <h3 class="text-sm font-bold text-slate-900 pb-3 border-b border-slate-100 flex items-center justify-between">
-          <span>Clearance Progress by Department / Unit</span>
-          <span class="text-xs text-slate-400 font-normal">All 349 Members</span>
+        <h3 class="flex flex-wrap items-baseline justify-between gap-2 border-b border-slate-100 pb-3 text-sm font-bold text-slate-900">
+          <span>Clearance by department</span>
+          <span class="text-xs font-normal text-slate-400">All 349 members</span>
         </h3>
         
         <div class="space-y-4 mt-4">
           <div v-for="unit in stats.unit_progress" :key="unit.unit" class="text-xs">
-            <div class="flex justify-between font-semibold text-slate-700 mb-1">
+            <div class="mb-1 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 font-semibold text-slate-700">
               <span>{{ unit.unit_name }}</span>
               <span>{{ unit.completed }} / 349 ({{ unit.pct }}%)</span>
             </div>
@@ -179,7 +179,7 @@ onMounted(() => {
         <div class="divide-y divide-slate-100 mt-3 text-xs">
           <!-- Constituency MPs -->
           <div class="py-3">
-            <div class="flex justify-between font-bold text-slate-900 mb-1">
+            <div class="mb-1 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 font-bold text-slate-900">
               <span>Elected Constituency MPs (290)</span>
               <span class="text-parliament-green">{{ stats.category_breakdown.MP?.fully_cleared }} cleared</span>
             </div>
@@ -192,7 +192,7 @@ onMounted(() => {
 
           <!-- County Woman Reps -->
           <div class="py-3">
-            <div class="flex justify-between font-bold text-slate-900 mb-1">
+            <div class="mb-1 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 font-bold text-slate-900">
               <span>County Woman Representatives (47)</span>
               <span class="text-purple-700">{{ stats.category_breakdown.WOMAN_REP?.fully_cleared }} cleared</span>
             </div>
@@ -205,7 +205,7 @@ onMounted(() => {
 
           <!-- Nominated Members -->
           <div class="py-3">
-            <div class="flex justify-between font-bold text-slate-900 mb-1">
+            <div class="mb-1 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 font-bold text-slate-900">
               <span>Nominated Members (12)</span>
               <span class="text-blue-700">{{ stats.category_breakdown.NOMINATED?.fully_cleared }} cleared</span>
             </div>
@@ -225,16 +225,16 @@ onMounted(() => {
       
       <!-- 14-Day Trend Table / Mini Bar -->
       <div class="lg:col-span-2 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-        <h3 class="text-sm font-bold text-slate-900 pb-3 border-b border-slate-100 flex items-center justify-between">
+        <h3 class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3 text-sm font-bold text-slate-900">
           <span class="flex items-center space-x-1.5">
             <TrendingUp class="w-4 h-4 text-parliament-green" />
-            <span>14-Day Influx Trend (Online vs Onboarded)</span>
+            <span>14-Day Influx Trend</span>
           </span>
-          <span class="text-[11px] text-slate-400">Daily Trajectory</span>
+          <span class="text-[11px] text-slate-400">Online vs Onboarded</span>
         </h3>
 
-        <div class="mt-4 overflow-x-auto">
-          <div class="flex items-end gap-2 h-44 pt-6 px-2 min-w-[500px]">
+        <div class="mt-4">
+          <div class="flex h-44 items-end gap-1 px-1 pt-6">
             <div 
               v-for="day in stats.fourteen_day_trend" 
               :key="day.date" 
@@ -257,11 +257,11 @@ onMounted(() => {
                   :title="`${day.date}: ${day.desk} Onboarded`"
                 ></div>
               </div>
-              <span class="text-[9px] text-slate-500 font-medium whitespace-nowrap">{{ day.date }}</span>
+              <span class="w-full text-center text-[8px] font-medium leading-tight text-slate-500">{{ day.date }}</span>
             </div>
           </div>
           
-          <div class="flex items-center justify-center space-x-6 text-xs text-slate-500 pt-3 border-t border-slate-100 mt-2">
+          <div class="mt-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-slate-100 pt-3 text-xs text-slate-500">
             <div class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded bg-amber-400"></span><span>Online Pre-Registrations</span></div>
             <div class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded bg-parliament-green"></span><span>Onboarded</span></div>
           </div>

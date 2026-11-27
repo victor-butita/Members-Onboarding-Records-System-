@@ -39,7 +39,7 @@ const handleForcePasswordChange = async () => {
 
     <div class="flex flex-1 min-h-0">
       <Sidebar :open="sidebarOpen" @close="sidebarOpen = false" />
-      <main class="flex-1 min-w-0 overflow-y-auto px-4 py-6 sm:px-7 lg:px-9">
+      <main class="flex-1 min-w-0 overflow-x-hidden overflow-y-auto px-3 py-5 sm:px-7 lg:px-9">
         <div class="max-w-[1240px] mx-auto">
           <router-view />
         </div>

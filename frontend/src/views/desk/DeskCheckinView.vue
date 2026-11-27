@@ -218,9 +218,9 @@ const triggerReopen = async () => {
         <Search class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
       </div>
 
-      <div class="flex items-center space-x-2 w-full sm:w-auto">
-        <span class="text-slate-500 font-semibold">Filter Stage:</span>
-        <select v-model="selectedStage" @change="fetchDeskQueue" class="px-3 py-2 border rounded-xl outline-none bg-slate-50 text-slate-800 font-medium">
+      <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+        <span class="font-semibold text-slate-500">Filter Stage:</span>
+        <select v-model="selectedStage" @change="fetchDeskQueue" class="w-full rounded-xl border bg-slate-50 px-3 py-2 font-medium text-slate-800 outline-none sm:w-auto">
           <option value="ALL">All Stages</option>
           <option value="GAZETTED">Gazetted Only (Not Submitted)</option>
           <option value="SUBMITTED_ONLINE">Submitted Online</option>
@@ -233,7 +233,7 @@ const triggerReopen = async () => {
     <!-- Members Table -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs divide-y divide-slate-100">
+        <table class="stack-table w-full text-left text-xs divide-y divide-slate-100">
           <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider text-[11px]">
             <tr>
               <th class="py-3.5 px-4">Member Name</th>
@@ -247,21 +247,21 @@ const triggerReopen = async () => {
           </thead>
           <tbody class="divide-y divide-slate-100 text-slate-700">
             <tr v-for="m in members" :key="m.id" class="hover:bg-slate-50/80 transition-colors">
-              <td class="py-3 px-4 font-bold text-slate-900">
+              <td class="stack-title py-3 px-4 font-bold text-slate-900">
                 <div class="text-xs">Hon. {{ m.full_name }}</div>
                 <div class="text-[10px] text-slate-400 font-mono">{{ m.submission_reference || 'Not submitted online' }}</div>
               </td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4" data-label="Category">
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800">
                   {{ m.category.replace('_', ' ') }}
                 </span>
               </td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4" data-label="Seat">
                 <div class="font-medium text-slate-900">{{ m.county || '—' }}</div>
                 <div class="text-[10px] text-slate-400">{{ m.constituency || 'Nominated' }}</div>
               </td>
-              <td class="py-3 px-4 font-mono font-medium">{{ m.national_id || 'Pending' }}</td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4 font-mono font-medium" data-label="National ID">{{ m.national_id || 'Pending' }}</td>
+              <td class="py-3 px-4" data-label="Stage">
                 <span 
                   class="px-2.5 py-0.5 rounded-full text-[10px] font-bold"
                   :class="{
@@ -274,14 +274,14 @@ const triggerReopen = async () => {
                   {{ m.stage === 'DESK_CHECKED_IN' ? 'ONBOARDED' : m.stage.replace(/_/g, ' ') }}
                 </span>
               </td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4" data-label="Documents">
                 <span v-if="m.original_docs_verified && m.biodata_confirmed" class="text-emerald-700 font-bold flex items-center space-x-1">
                   <CheckCircle2 class="w-3.5 h-3.5" />
                   <span>Verified</span>
                 </span>
                 <span v-else class="text-slate-400 font-medium">Pending</span>
               </td>
-              <td class="py-3 px-4 text-right">
+              <td class="stack-actions py-3 px-4 text-right">
                 <div class="flex items-center justify-end space-x-2">
                   <button 
                     @click="openViewModal(m)"

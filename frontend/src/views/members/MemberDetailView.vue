@@ -35,10 +35,10 @@ onMounted(() => {
   <div class="space-y-6">
     
     <!-- Top Bar -->
-    <div class="flex items-center justify-between no-print">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between no-print">
       <button 
         @click="router.back()" 
-        class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center space-x-1.5 shadow-sm"
+        class="flex w-full items-center justify-center space-x-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50 sm:w-auto"
       >
         <ArrowLeft class="w-4 h-4" />
         <span>Back to Register</span>
@@ -46,7 +46,7 @@ onMounted(() => {
 
       <button 
         @click="window.print()" 
-        class="px-4 py-1.5 rounded-lg bg-slate-900 hover:bg-black text-white text-xs font-bold flex items-center space-x-1.5 shadow-sm"
+        class="flex w-full items-center justify-center space-x-1.5 rounded-lg bg-slate-900 px-4 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-black sm:w-auto"
       >
         <Printer class="w-4 h-4 text-parliament-gold" />
         <span>Print Member Dossier</span>
@@ -75,7 +75,7 @@ onMounted(() => {
           </div>
         </div>
 
-        <div class="flex flex-col items-end gap-1.5">
+        <div class="flex flex-col items-start gap-1.5 sm:items-end">
           <span 
             class="px-3 py-1 rounded-full text-xs font-bold"
             :class="{
@@ -219,12 +219,12 @@ onMounted(() => {
       <div class="space-y-3 pt-2">
         <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider pb-1 border-b">Member Audit & Activity History</h3>
         <div class="divide-y divide-slate-100 text-xs">
-          <div v-for="log in data.logs" :key="log.id" class="py-2.5 flex items-center justify-between">
+          <div v-for="log in data.logs" :key="log.id" class="flex flex-col gap-1 py-2.5 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <span class="font-bold text-slate-900">{{ log.step }}</span>
               <span class="text-slate-500 text-[11px] block">{{ log.remarks }}</span>
             </div>
-            <div class="text-right">
+            <div class="text-left sm:text-right">
               <span class="text-slate-700 font-medium">{{ log.completed_by }} ({{ log.unit }})</span>
               <span class="text-slate-400 text-[10px] block font-mono">{{ new Date(log.timestamp).toLocaleString() }}</span>
             </div>

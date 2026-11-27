@@ -110,7 +110,7 @@ const submitStatusChange = async () => {
 
       <div class="flex flex-wrap items-center gap-2">
         <!-- Category Filter -->
-        <select v-model="selectedCategory" @change="fetchMembers" class="px-3 py-2 border rounded-xl bg-slate-50 outline-none">
+        <select v-model="selectedCategory" @change="fetchMembers" class="w-full border rounded-xl bg-slate-50 px-3 py-2 outline-none sm:w-auto">
           <option value="ALL">All Categories</option>
           <option value="MP">Constituency MPs (290)</option>
           <option value="WOMAN_REP">County Woman Reps (47)</option>
@@ -118,7 +118,7 @@ const submitStatusChange = async () => {
         </select>
 
         <!-- Stage Filter -->
-        <select v-model="selectedStage" @change="fetchMembers" class="px-3 py-2 border rounded-xl bg-slate-50 outline-none">
+        <select v-model="selectedStage" @change="fetchMembers" class="w-full border rounded-xl bg-slate-50 px-3 py-2 outline-none sm:w-auto">
           <option value="ALL">All Stages</option>
           <option value="GAZETTED">1. Gazetted</option>
           <option value="SUBMITTED_ONLINE">2. Submitted Online</option>
@@ -127,7 +127,7 @@ const submitStatusChange = async () => {
         </select>
 
         <!-- Status Filter -->
-        <select v-model="selectedStatus" @change="fetchMembers" class="px-3 py-2 border rounded-xl bg-slate-50 outline-none">
+        <select v-model="selectedStatus" @change="fetchMembers" class="w-full border rounded-xl bg-slate-50 px-3 py-2 outline-none sm:w-auto">
           <option value="ALL">All Statuses</option>
           <option value="ACTIVE">Active</option>
           <option value="PETITIONED">Petitioned</option>
@@ -139,7 +139,7 @@ const submitStatusChange = async () => {
     <!-- Members Table -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs divide-y divide-slate-100">
+        <table class="stack-table w-full text-left text-xs divide-y divide-slate-100">
           <thead class="bg-slate-50 text-slate-600 font-bold">
             <tr>
               <th class="py-3 px-4">Member Name</th>
@@ -153,13 +153,13 @@ const submitStatusChange = async () => {
           </thead>
           <tbody class="divide-y divide-slate-100 text-slate-700">
             <tr v-for="m in members" :key="m.id" class="hover:bg-slate-50/80">
-              <td class="py-3 px-4 font-bold text-slate-900">
+              <td class="stack-title py-3 px-4 font-bold text-slate-900">
                 <router-link :to="`/members/${m.id}`" class="hover:text-parliament-green flex items-center space-x-1.5">
                   <span>Hon. {{ m.full_name }}</span>
                 </router-link>
                 <div class="text-[10px] text-slate-400 font-mono">{{ m.submission_reference || 'Ref pending' }}</div>
               </td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4" data-label="Category">
                 <span 
                   class="px-2 py-0.5 rounded-full text-[10px] font-bold"
                   :class="{
@@ -171,12 +171,12 @@ const submitStatusChange = async () => {
                   {{ m.category.replace('_', ' ') }}
                 </span>
               </td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4" data-label="Seat">
                 <div>{{ m.county || '—' }}</div>
                 <div class="text-[10px] text-slate-400">{{ m.constituency || 'Nominated Seat' }}</div>
               </td>
-              <td class="py-3 px-4 font-medium">{{ m.party }}</td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4 font-medium" data-label="Party">{{ m.party }}</td>
+              <td class="py-3 px-4" data-label="Stage">
                 <span 
                   class="px-2 py-0.5 rounded-full text-[10px] font-bold"
                   :class="{
@@ -189,7 +189,7 @@ const submitStatusChange = async () => {
                   {{ m.stage === 'DESK_CHECKED_IN' ? 'ONBOARDED' : m.stage.replace(/_/g, ' ') }}
                 </span>
               </td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4" data-label="Status">
                 <span 
                   class="px-2 py-0.5 rounded-full text-[10px] font-bold"
                   :class="{
@@ -201,7 +201,7 @@ const submitStatusChange = async () => {
                   {{ m.status }}
                 </span>
               </td>
-              <td class="py-3 px-4 text-right">
+              <td class="stack-actions py-3 px-4 text-right">
                 <div class="flex items-center justify-end space-x-2">
                   <button 
                     @click="openStatusModal(m)"

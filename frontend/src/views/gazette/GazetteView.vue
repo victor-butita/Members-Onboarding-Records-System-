@@ -172,7 +172,7 @@ const downloadTemplate = () => {
       
       <!-- Seat Target Verification Table -->
       <div>
-        <h3 class="text-sm font-bold text-slate-900 pb-2 border-b border-slate-100 flex items-center justify-between">
+        <h3 class="flex flex-col gap-2 border-b border-slate-100 pb-2 text-sm font-bold text-slate-900 sm:flex-row sm:items-center sm:justify-between">
           <span>Constitutional Seat Count Audit (290 / 47 / 12)</span>
           <span 
             class="text-xs px-2.5 py-0.5 rounded-full font-bold"
@@ -222,7 +222,7 @@ const downloadTemplate = () => {
           Extracted members ({{ previewData.total_parsed }}). Correct a category before import. Preamble and other notice text is ignored.
         </h4>
         <div class="border border-slate-200 rounded-xl overflow-auto max-h-96">
-          <table class="w-full text-left text-xs divide-y divide-slate-100">
+          <table class="stack-table w-full text-left text-xs divide-y divide-slate-100">
             <thead class="bg-slate-50 text-slate-600 font-bold sticky top-0">
               <tr>
                 <th class="py-2.5 px-3">Surname</th>
@@ -235,18 +235,18 @@ const downloadTemplate = () => {
             </thead>
             <tbody class="divide-y divide-slate-100 text-slate-700">
               <tr v-for="(rec, idx) in (previewData.records || previewData.sample_records)" :key="idx" class="hover:bg-slate-50">
-                <td class="py-2 px-3 font-bold text-slate-900">{{ rec.surname }}</td>
-                <td class="py-2 px-3">{{ rec.other_names }}</td>
-                <td class="py-2 px-3">
-                  <select v-model="rec.category" @change="recountPreview" class="px-2 py-1 border rounded-lg bg-white text-[11px] font-bold">
+                <td class="stack-title py-2 px-3 font-bold text-slate-900">{{ rec.surname }}</td>
+                <td class="py-2 px-3" data-label="Other names">{{ rec.other_names }}</td>
+                <td class="py-2 px-3" data-label="Category">
+                  <select v-model="rec.category" @change="recountPreview" class="max-w-full rounded-lg border bg-white px-2 py-1 text-[11px] font-bold">
                     <option value="MP">MP</option>
                     <option value="WOMAN_REP">WOMAN_REP</option>
                     <option value="NOMINATED">NOMINATED</option>
                   </select>
                 </td>
-                <td class="py-2 px-3">{{ rec.county || '—' }}</td>
-                <td class="py-2 px-3">{{ rec.constituency || '—' }}</td>
-                <td class="py-2 px-3 font-medium">{{ rec.party }}</td>
+                <td class="py-2 px-3" data-label="County">{{ rec.county || '—' }}</td>
+                <td class="py-2 px-3" data-label="Constituency">{{ rec.constituency || '—' }}</td>
+                <td class="py-2 px-3 font-medium" data-label="Party">{{ rec.party }}</td>
               </tr>
             </tbody>
           </table>
@@ -286,7 +286,7 @@ const downloadTemplate = () => {
         <button 
           @click="commitGazette"
           :disabled="isCommitting || !(previewData.records || previewData.sample_records || []).length"
-          class="px-6 py-2.5 rounded-xl bg-parliament-green hover:bg-parliament-green-dark text-white font-bold text-xs shadow-md transition-all flex items-center space-x-1.5 disabled:opacity-50"
+          class="flex w-full items-center justify-center space-x-1.5 rounded-xl bg-parliament-green px-6 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:bg-parliament-green-dark disabled:opacity-50 sm:w-auto"
         >
           <RefreshCw v-if="isCommitting" class="w-3.5 h-3.5 animate-spin" />
           <span>{{ isCommitting ? 'Overwriting official register...' : 'Upload and overwrite gazette' }}</span>

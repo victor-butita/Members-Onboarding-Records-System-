@@ -26,7 +26,7 @@ onMounted(() => {
 <template>
   <div class="space-y-6">
     
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <div class="text-[11px] font-bold text-parliament-gold uppercase tracking-wider">Demographic Profile & Analytics</div>
         <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">14th Parliament Composition Insights</h1>

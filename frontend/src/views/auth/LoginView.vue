@@ -102,9 +102,39 @@ const handleLogin = async () => {
       </div>
     </section>
 
-    <div class="flex min-h-screen flex-col justify-center px-6 py-12">
+    <div class="flex min-h-screen flex-col">
+      <section class="relative h-52 shrink-0 overflow-hidden bg-[#0c2418] lg:hidden">
+        <img
+          v-for="(item, index) in slides"
+          :key="`m-${item.src}`"
+          :src="item.src"
+          :alt="item.title"
+          class="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
+          :class="index === slide ? 'opacity-100' : 'opacity-0'"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-[#07140f] via-[#07140f]/45 to-[#07140f]/25"></div>
+        <div class="relative z-10 flex h-full flex-col justify-between p-4 text-white">
+          <div class="flex items-center gap-3">
+            <img
+              src="/brand/national-assembly-logo.png"
+              alt="The National Assembly of the Republic of Kenya"
+              class="h-11 w-11 rounded-full bg-white object-cover"
+            />
+            <div>
+              <div class="text-[10px] font-semibold uppercase tracking-[0.18em] text-parliament-gold">Republic of Kenya</div>
+              <div class="font-serif text-lg leading-tight">The National Assembly</div>
+            </div>
+          </div>
+          <div>
+            <p class="font-serif text-2xl leading-tight">{{ slides[slide].title }}</p>
+            <p class="text-xs text-white/80">{{ slides[slide].caption }}</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="flex flex-1 flex-col justify-center px-4 py-8 sm:px-6">
       <div class="mx-auto w-full max-w-md">
-        <div class="mb-8 flex flex-col items-center text-center">
+        <div class="mb-6 hidden flex-col items-center text-center lg:mb-8 lg:flex">
           <img
             src="/brand/national-assembly-logo.png"
             alt="The National Assembly of the Republic of Kenya"
@@ -115,7 +145,7 @@ const handleLogin = async () => {
           <p class="mt-1 text-sm text-slate-500">Members' Onboarding & Records System</p>
         </div>
 
-        <div class="rounded-3xl border border-[#e6e0d4] bg-white px-6 py-8 shadow-card sm:px-8">
+        <div class="rounded-3xl border border-[#e6e0d4] bg-white px-5 py-7 shadow-card sm:px-8">
           <h2 class="font-serif text-2xl text-slate-900">Staff sign in</h2>
           <p class="mt-1 text-sm text-slate-500">Use the email and password issued for your department.</p>
 
@@ -161,7 +191,7 @@ const handleLogin = async () => {
             </button>
           </form>
 
-          <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-xs">
+          <div class="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4 text-xs">
             <span class="flex items-center gap-1 text-slate-400">
               <ShieldCheck class="h-3.5 w-3.5 text-parliament-gold" />
               Department access
@@ -171,6 +201,7 @@ const handleLogin = async () => {
             </router-link>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </div>

@@ -266,45 +266,45 @@ const filteredQueue = computed(() => {
     </div>
 
     <!-- Unit Tabs Navigation (Strict Department Isolation) -->
-    <div class="flex border-b border-slate-200 space-x-2 text-xs font-bold">
+    <div class="-mx-1 flex gap-1 overflow-x-auto border-b border-slate-200 px-1 text-xs font-bold">
       <button 
         v-if="canAccessTab('MEDIA')"
         @click="switchTab('MEDIA')"
-        class="py-3 px-4 border-b-2 flex items-center space-x-2 transition-all"
+        class="flex shrink-0 items-center space-x-2 border-b-2 px-3 py-3 transition-all sm:px-4"
         :class="activeTab === 'MEDIA' ? 'border-parliament-green text-parliament-green bg-emerald-50/50' : 'border-transparent text-slate-500 hover:text-slate-800'"
       >
         <Camera class="w-4 h-4" />
-        <span>1. Media Relations (Official Photo)</span>
+        <span>Media</span>
       </button>
 
       <button 
         v-if="canAccessTab('ICT')"
         @click="switchTab('ICT')"
-        class="py-3 px-4 border-b-2 flex items-center space-x-2 transition-all"
+        class="flex shrink-0 items-center space-x-2 border-b-2 px-3 py-3 transition-all sm:px-4"
         :class="activeTab === 'ICT' ? 'border-parliament-green text-parliament-green bg-emerald-50/50' : 'border-transparent text-slate-500 hover:text-slate-800'"
       >
         <Cpu class="w-4 h-4" />
-        <span>2. ICT (Chamber Biometrics)</span>
+        <span>ICT</span>
       </button>
 
       <button 
         v-if="canAccessTab('SECURITY')"
         @click="switchTab('SECURITY')"
-        class="py-3 px-4 border-b-2 flex items-center space-x-2 transition-all"
+        class="flex shrink-0 items-center space-x-2 border-b-2 px-3 py-3 transition-all sm:px-4"
         :class="activeTab === 'SECURITY' ? 'border-parliament-green text-parliament-green bg-emerald-50/50' : 'border-transparent text-slate-500 hover:text-slate-800'"
       >
         <Shield class="w-4 h-4" />
-        <span>3. Security (Badge & Vetting)</span>
+        <span>Security</span>
       </button>
 
       <button 
         v-if="canAccessTab('HR_FINANCE')"
         @click="switchTab('HR_FINANCE')"
-        class="py-3 px-4 border-b-2 flex items-center space-x-2 transition-all"
+        class="flex shrink-0 items-center space-x-2 border-b-2 px-3 py-3 transition-all sm:px-4"
         :class="activeTab === 'HR_FINANCE' ? 'border-parliament-green text-parliament-green bg-emerald-50/50' : 'border-transparent text-slate-500 hover:text-slate-800'"
       >
         <Briefcase class="w-4 h-4" />
-        <span>4. HR & Finance (Payroll/SHA)</span>
+        <span>HR & Finance</span>
       </button>
     </div>
 
@@ -324,7 +324,7 @@ const filteredQueue = computed(() => {
     <!-- Active Unit Work Queue Table -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs divide-y divide-slate-100">
+        <table class="stack-table w-full text-left text-xs divide-y divide-slate-100">
           <thead class="bg-slate-50 text-slate-600 font-bold">
             <tr>
               <th class="py-3 px-4">Member Name</th>
@@ -337,24 +337,24 @@ const filteredQueue = computed(() => {
           </thead>
           <tbody class="divide-y divide-slate-100 text-slate-700">
             <tr v-for="m in filteredQueue" :key="m.id" class="hover:bg-slate-50/80">
-              <td class="py-3 px-4 font-bold text-slate-900">
+              <td class="stack-title py-3 px-4 font-bold text-slate-900">
                 <div>Hon. {{ m.full_name }}</div>
                 <div class="text-[10px] text-slate-400 font-mono">ID: {{ m.national_id || 'Pending' }}</div>
               </td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4" data-label="Category">
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100">
                   {{ m.category.replace('_', ' ') }}
                 </span>
               </td>
-              <td class="py-3 px-4">{{ m.county || m.party }}</td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4" data-label="Seat">{{ m.county || m.party }}</td>
+              <td class="py-3 px-4" data-label="Onboarded">
                 <span v-if="m.desk_checked_in_at" class="text-blue-700 font-bold flex items-center space-x-1">
                   <CheckCircle2 class="w-3.5 h-3.5" />
                   <span>Onboarded</span>
                 </span>
                 <span v-else class="text-slate-400 italic">Not onboarded</span>
               </td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4" data-label="Status">
                 <!-- Media status -->
                 <template v-if="activeTab === 'MEDIA'">
                   <span v-if="m.photo_approved" class="text-emerald-700 font-bold flex items-center space-x-1">
@@ -391,7 +391,7 @@ const filteredQueue = computed(() => {
                   <span v-else class="text-amber-600 font-bold">Payroll & Bank Pending</span>
                 </template>
               </td>
-              <td class="py-3 px-4 text-right">
+              <td class="stack-actions py-3 px-4 text-right">
                 <button 
                   v-if="canAct"
                   @click="openActionModal(m)"

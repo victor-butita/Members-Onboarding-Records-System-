@@ -200,7 +200,7 @@ const restartForm = () => {
           <div>
             <div class="text-[11px] font-extrabold text-parliament-gold tracking-widest uppercase">Republic of Kenya</div>
             <h1 class="font-serif text-lg leading-tight">The National Assembly</h1>
-            <p class="text-xs text-emerald-100">Members' Onboarding & Records System (MORS)</p>
+            <p class="text-xs text-emerald-100">Members' Onboarding & Records</p>
           </div>
         </div>
 
@@ -268,7 +268,7 @@ const restartForm = () => {
             class="mx-auto mb-4 h-20 w-20 rounded-full bg-white object-cover shadow-sm"
           />
           <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-parliament-gold-dark">14th Parliament</div>
-          <h2 class="mt-1 font-serif text-3xl text-slate-900">Find your gazette name</h2>
+          <h2 class="mt-1 font-serif text-2xl text-slate-900 sm:text-3xl">Find your gazette name</h2>
           <p class="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-600">
             Search the name exactly as it appears in the IEBC gazette notice. Scans can wait. Physical documents are checked at the registration desk.
           </p>
@@ -298,10 +298,10 @@ const restartForm = () => {
               v-for="item in searchResults" 
               :key="item.id"
               @click="selectMember(item)"
-              class="p-4 hover:bg-emerald-50/60 cursor-pointer transition-colors flex items-center justify-between"
+              class="flex cursor-pointer items-center justify-between gap-3 p-4 transition-colors hover:bg-emerald-50/60"
             >
-              <div>
-                <div class="font-bold text-sm text-slate-900 flex items-center space-x-2">
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2 text-sm font-bold text-slate-900">
                   <span>Hon. {{ item.full_name }}</span>
                   <span 
                     class="text-[10px] font-bold px-2 py-0.5 rounded-full"
@@ -432,9 +432,9 @@ const restartForm = () => {
           </div>
 
           <div>
-            <div class="pb-2 border-b border-slate-100 mb-4 flex items-center justify-between">
+            <div class="mb-4 flex flex-col gap-1 border-b border-slate-100 pb-2 sm:flex-row sm:items-center sm:justify-between">
               <h3 class="text-sm font-bold text-slate-900">2. Personal Assistant Information</h3>
-              <span class="text-[11px] text-slate-500 font-medium">Designated liaison for onboarding coordination</span>
+              <span class="text-[11px] font-medium text-slate-500">Designated liaison for onboarding coordination</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -454,18 +454,18 @@ const restartForm = () => {
             </div>
           </div>
 
-          <div class="flex justify-between pt-4 border-t border-slate-100">
+          <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:justify-between">
             <button 
               type="button" 
               @click="currentStep = 1" 
-              class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 flex items-center space-x-1.5"
+              class="flex w-full items-center justify-center space-x-1.5 rounded-xl border border-slate-200 px-5 py-2.5 font-bold text-slate-700 hover:bg-slate-50 sm:w-auto"
             >
               <ArrowLeft class="w-4 h-4" />
               <span>Back</span>
             </button>
             <button 
               type="submit" 
-              class="px-6 py-2.5 rounded-xl bg-parliament-green hover:bg-parliament-green-dark text-white font-bold shadow-md flex items-center space-x-1.5"
+              class="flex w-full items-center justify-center space-x-1.5 rounded-xl bg-parliament-green px-6 py-2.5 font-bold text-white shadow-md hover:bg-parliament-green-dark sm:w-auto"
             >
               <span>Next: Document Scans</span>
               <ArrowRight class="w-4 h-4" />
@@ -500,7 +500,7 @@ const restartForm = () => {
                   <span class="text-[10px] text-slate-400 font-semibold">(Optional)</span>
                 </div>
                 <p class="text-slate-500 mb-2">Clear colour photograph with a plain white background (or captured at Media Relations desk).</p>
-                <input type="file" @change="handlePhotoChange" accept="image/png,image/jpeg" class="text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-parliament-green file:text-white file:font-semibold hover:file:bg-parliament-green-dark cursor-pointer" />
+                <input type="file" @change="handlePhotoChange" accept="image/png,image/jpeg" class="w-full max-w-full cursor-pointer text-xs text-slate-600 file:mr-2 file:rounded-lg file:border-0 file:bg-parliament-green file:px-3 file:py-1.5 file:font-semibold file:text-white hover:file:bg-parliament-green-dark" />
               </div>
             </div>
           </div>
@@ -512,7 +512,7 @@ const restartForm = () => {
               <span class="text-[10px] text-slate-400 font-semibold">(Optional)</span>
             </div>
             <p class="text-slate-500 mb-2">PDF, JPG, or PNG up to 5 MB (or verify original document at desk).</p>
-            <input type="file" @change="handleIdDocChange" accept=".pdf,image/png,image/jpeg" class="text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-800 file:text-white file:font-semibold hover:file:bg-slate-900 cursor-pointer" />
+            <input type="file" @change="handleIdDocChange" accept=".pdf,image/png,image/jpeg" class="w-full max-w-full cursor-pointer text-xs text-slate-600 file:mr-2 file:rounded-lg file:border-0 file:bg-slate-800 file:px-3 file:py-1.5 file:font-semibold file:text-white hover:file:bg-slate-900" />
           </div>
 
           <!-- 3. IEBC Certificate Scan -->
@@ -522,7 +522,7 @@ const restartForm = () => {
               <span class="text-[10px] text-slate-400 font-semibold">(Optional)</span>
             </div>
             <p class="text-slate-500 mb-2">Official Form 23 or Nomination Certificate issued by IEBC (or verify original at desk).</p>
-            <input type="file" @change="handleIebcCertChange" accept=".pdf,image/png,image/jpeg" class="text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-800 file:text-white file:font-semibold hover:file:bg-slate-900 cursor-pointer" />
+            <input type="file" @change="handleIebcCertChange" accept=".pdf,image/png,image/jpeg" class="w-full max-w-full cursor-pointer text-xs text-slate-600 file:mr-2 file:rounded-lg file:border-0 file:bg-slate-800 file:px-3 file:py-1.5 file:font-semibold file:text-white hover:file:bg-slate-900" />
           </div>
 
           <!-- NOTICE Box -->
@@ -539,11 +539,11 @@ const restartForm = () => {
             </p>
           </div>
 
-          <div class="flex justify-between pt-4 border-t border-slate-100">
+          <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:justify-between">
             <button 
               type="button" 
               @click="currentStep = 2" 
-              class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 flex items-center space-x-1.5"
+              class="flex w-full items-center justify-center space-x-1.5 rounded-xl border border-slate-200 px-5 py-2.5 font-bold text-slate-700 hover:bg-slate-50 sm:w-auto"
             >
               <ArrowLeft class="w-4 h-4" />
               <span>Back</span>
@@ -552,7 +552,7 @@ const restartForm = () => {
               type="button"
               @click="submitOnboarding"
               :disabled="isSubmitting"
-              class="px-8 py-2.5 rounded-xl bg-parliament-green hover:bg-parliament-green-dark text-white font-extrabold shadow-lg transition-all flex items-center space-x-2 disabled:opacity-50"
+              class="flex w-full items-center justify-center space-x-2 rounded-xl bg-parliament-green px-6 py-2.5 text-center font-extrabold text-white shadow-lg transition-all hover:bg-parliament-green-dark disabled:opacity-50 sm:w-auto"
             >
               <RefreshCw v-if="isSubmitting" class="w-4 h-4 animate-spin" />
               <span>{{ isSubmitting ? 'Submitting Details...' : 'Complete & Submit Registration' }}</span>
@@ -576,7 +576,7 @@ const restartForm = () => {
         <!-- Official Reference Box -->
         <div class="my-6 p-6 rounded-2xl bg-slate-900 text-white text-center shadow-inner">
           <div class="text-xs uppercase text-parliament-gold font-bold tracking-wider">Your Official MORS Reference Number</div>
-          <div class="text-3xl font-black tracking-widest text-white mt-1">{{ submissionResult.reference_number }}</div>
+          <div class="mt-1 break-all text-2xl font-black tracking-widest text-white sm:text-3xl">{{ submissionResult.reference_number }}</div>
           <div class="text-xs text-slate-400 mt-1">Please quote this reference number upon arrival at Parliament Buildings.</div>
         </div>
 
@@ -609,7 +609,7 @@ const restartForm = () => {
               <div class="font-bold text-slate-800">Need to make a correction?</div>
               <div class="text-slate-500">Contact the Registration Secretariat before check-in:</div>
             </div>
-            <div class="text-right text-slate-700">
+            <div class="text-left text-slate-700 sm:text-right">
               <div class="flex items-center space-x-1.5"><Mail class="w-3.5 h-3.5 text-parliament-green" /> <span>{{ portalStatus.help_desk_email }}</span></div>
               <div class="flex items-center space-x-1.5 mt-0.5"><Phone class="w-3.5 h-3.5 text-parliament-green" /> <span>{{ portalStatus.help_desk_phone }}</span></div>
             </div>

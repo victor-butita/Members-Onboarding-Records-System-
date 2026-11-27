@@ -61,7 +61,7 @@ const exportCsv = () => {
         <div class="text-[11px] font-bold text-parliament-gold uppercase tracking-wider">Office of the Clerk · Statutory Reporting</div>
         <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Statutory Reports & Oversight Audits</h1>
       </div>
-      <div class="flex items-center space-x-2">
+      <div class="flex flex-wrap items-center gap-2">
         <button 
           @click="exportCsv" 
           class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold flex items-center space-x-1.5 shadow-sm"
@@ -138,12 +138,12 @@ const exportCsv = () => {
         <div>
           <h4 class="font-bold text-slate-900 text-sm uppercase pb-1 border-b">2. Clearance Steps Completed by Unit</h4>
           <div class="divide-y divide-slate-100 border rounded-xl mt-3">
-            <div class="p-3 flex justify-between"><span>Clerks (L&P) Original Document Verification</span><strong>{{ reportData.unit_progress.clerks_verified }} / {{ reportData.total_members }}</strong></div>
-            <div class="p-3 flex justify-between"><span>Media Relations Official Passport Photo Approved</span><strong>{{ reportData.unit_progress.media_approved }} / {{ reportData.total_members }}</strong></div>
-            <div class="p-3 flex justify-between"><span>ICT Chamber Attendance & Voting Biometrics</span><strong>{{ reportData.unit_progress.ict_biometrics }} / {{ reportData.total_members }}</strong></div>
-            <div class="p-3 flex justify-between"><span>Security Clearance & Parliamentary Badge Issued</span><strong>{{ reportData.unit_progress.security_cleared }} / {{ reportData.total_members }}</strong></div>
-            <div class="p-3 flex justify-between"><span>HR Information & Records Verified</span><strong>{{ reportData.unit_progress.hr_verified }} / {{ reportData.total_members }}</strong></div>
-            <div class="p-3 flex justify-between"><span>Finance, Payroll & SHA/SHIF Accounts Verified</span><strong>{{ reportData.unit_progress.finance_verified }} / {{ reportData.total_members }}</strong></div>
+            <div class="flex flex-col gap-1 p-3 sm:flex-row sm:items-center sm:justify-between"><span>Clerks (L&P) Original Document Verification</span><strong class="shrink-0">{{ reportData.unit_progress.clerks_verified }} / {{ reportData.total_members }}</strong></div>
+            <div class="flex flex-col gap-1 p-3 sm:flex-row sm:items-center sm:justify-between"><span>Media Relations Official Passport Photo Approved</span><strong class="shrink-0">{{ reportData.unit_progress.media_approved }} / {{ reportData.total_members }}</strong></div>
+            <div class="flex flex-col gap-1 p-3 sm:flex-row sm:items-center sm:justify-between"><span>ICT Chamber Attendance & Voting Biometrics</span><strong class="shrink-0">{{ reportData.unit_progress.ict_biometrics }} / {{ reportData.total_members }}</strong></div>
+            <div class="flex flex-col gap-1 p-3 sm:flex-row sm:items-center sm:justify-between"><span>Security Clearance & Parliamentary Badge Issued</span><strong class="shrink-0">{{ reportData.unit_progress.security_cleared }} / {{ reportData.total_members }}</strong></div>
+            <div class="flex flex-col gap-1 p-3 sm:flex-row sm:items-center sm:justify-between"><span>HR Information & Records Verified</span><strong class="shrink-0">{{ reportData.unit_progress.hr_verified }} / {{ reportData.total_members }}</strong></div>
+            <div class="flex flex-col gap-1 p-3 sm:flex-row sm:items-center sm:justify-between"><span>Finance, Payroll & SHA/SHIF Accounts Verified</span><strong class="shrink-0">{{ reportData.unit_progress.finance_verified }} / {{ reportData.total_members }}</strong></div>
           </div>
         </div>
       </div>
@@ -153,7 +153,7 @@ const exportCsv = () => {
         <div class="flex justify-between items-center text-slate-500">
           <span>Official Roll: {{ reportData.total }} Members Gazetted</span>
         </div>
-        <table class="w-full text-left divide-y divide-slate-200 border">
+        <div class="overflow-x-auto"><table class="w-full min-w-[44rem] text-left divide-y divide-slate-200 border">
           <thead class="bg-slate-50 font-bold text-slate-700">
             <tr>
               <th class="py-2 px-3">#</th>
@@ -176,13 +176,13 @@ const exportCsv = () => {
               <td class="py-1.5 px-3 font-mono text-slate-500">{{ r.submission_reference }}</td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       <!-- 3. ONLINE SUBMISSIONS REPORT -->
       <div v-else-if="selectedReport === 'online_submissions' && reportData" class="space-y-4 text-xs">
         <div class="text-slate-500">Total Pre-Registered Online: {{ reportData.total }} Members</div>
-        <table class="w-full text-left divide-y divide-slate-200 border">
+        <div class="overflow-x-auto"><table class="w-full min-w-[44rem] text-left divide-y divide-slate-200 border">
           <thead class="bg-slate-50 font-bold text-slate-700">
             <tr>
               <th class="py-2 px-3">Member Name</th>
@@ -205,13 +205,13 @@ const exportCsv = () => {
               <td class="py-1.5 px-3">{{ r.has_photo ? '✓ Attached' : '—' }}</td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       <!-- 4. PHYSICAL ONBOARDING REPORT -->
       <div v-else-if="selectedReport === 'physical_onboarding' && reportData" class="space-y-4 text-xs">
         <div class="text-slate-500">Onboarded at the registration desk: {{ reportData.total }} Members</div>
-        <table class="w-full text-left divide-y divide-slate-200 border">
+        <div class="overflow-x-auto"><table class="w-full min-w-[44rem] text-left divide-y divide-slate-200 border">
           <thead class="bg-slate-50 font-bold text-slate-700">
             <tr>
               <th class="py-2 px-3">Member Name</th>
@@ -230,13 +230,13 @@ const exportCsv = () => {
               <td class="py-1.5 px-3">{{ r.biodata_confirmed ? '✓ Confirmed' : 'Pending' }}</td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       <!-- 5. OUTSTANDING CLEARANCE BY UNIT REPORT -->
       <div v-else-if="selectedReport === 'outstanding_clearance' && reportData" class="space-y-4 text-xs">
         <div class="text-slate-500">Members with Pending Clearance Steps: {{ reportData.total }}</div>
-        <table class="w-full text-left divide-y divide-slate-200 border">
+        <div class="overflow-x-auto"><table class="w-full min-w-[44rem] text-left divide-y divide-slate-200 border">
           <thead class="bg-slate-50 font-bold text-slate-700">
             <tr>
               <th class="py-2 px-3">Member Name</th>
@@ -259,12 +259,12 @@ const exportCsv = () => {
               <td class="py-1.5 px-3 font-semibold">{{ r.stage === 'DESK_CHECKED_IN' ? 'ONBOARDED' : r.stage.replace(/_/g, ' ') }}</td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       <!-- 6. DOCUMENT VERIFICATION STATUS REPORT -->
       <div v-else-if="selectedReport === 'document_status' && reportData" class="space-y-4 text-xs">
-        <table class="w-full text-left divide-y divide-slate-200 border">
+        <div class="overflow-x-auto"><table class="w-full min-w-[44rem] text-left divide-y divide-slate-200 border">
           <thead class="bg-slate-50 font-bold text-slate-700">
             <tr>
               <th class="py-2 px-3">Member Name</th>
@@ -287,13 +287,13 @@ const exportCsv = () => {
               <td class="py-1.5 px-3 font-bold" :class="r.photo_approved ? 'text-emerald-700' : 'text-slate-400'">{{ r.photo_approved ? 'APPROVED' : 'PENDING' }}</td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       <!-- 7. COMPLETE AUDIT LOG REPORT -->
       <div v-else-if="selectedReport === 'audit_log' && reportData" class="space-y-4 text-xs">
         <div class="text-slate-500">Immutable Trail: Showing Latest {{ reportData.total }} Events</div>
-        <table class="w-full text-left divide-y divide-slate-200 border">
+        <div class="overflow-x-auto"><table class="w-full min-w-[44rem] text-left divide-y divide-slate-200 border">
           <thead class="bg-slate-50 font-bold text-slate-700">
             <tr>
               <th class="py-2 px-3">Timestamp</th>
@@ -314,11 +314,11 @@ const exportCsv = () => {
               <td class="py-1.5 px-3 text-slate-400">{{ r.ip_address || '—' }}</td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       <!-- Official Signoff Footer (Prints on bottom) -->
-      <div class="pt-8 border-t-2 border-slate-900 flex justify-between text-xs mt-8">
+      <div class="mt-8 flex flex-col gap-8 border-t-2 border-slate-900 pt-8 text-xs sm:flex-row sm:justify-between">
         <div>
           <div class="font-bold text-slate-900">PREPARED BY:</div>
           <div class="mt-4 text-slate-600">_________________________________</div>
@@ -326,7 +326,7 @@ const exportCsv = () => {
           <div class="text-slate-500 text-[10px]">Administrative Officer III, Onboarding Secretariat</div>
         </div>
 
-        <div class="text-right">
+        <div class="sm:text-right">
           <div class="font-bold text-slate-900">CERTIFIED & APPROVED BY:</div>
           <div class="mt-4 text-slate-600">_________________________________</div>
           <div class="font-semibold text-slate-800 mt-1">The Clerk of the National Assembly</div>

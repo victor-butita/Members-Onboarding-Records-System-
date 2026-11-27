@@ -90,11 +90,11 @@ const resendEmail = async (id) => {
         </div>
       </div>
 
-      <div class="flex justify-end pt-2">
+      <div class="flex justify-stretch pt-2 sm:justify-end">
         <button 
           @click="savePortalSettings"
           :disabled="isSaving"
-          class="px-5 py-2 rounded-xl bg-parliament-green hover:bg-parliament-green-dark text-white font-bold text-xs shadow-md"
+          class="w-full rounded-xl bg-parliament-green px-5 py-2 text-xs font-bold text-white shadow-md hover:bg-parliament-green-dark sm:w-auto"
         >
           {{ isSaving ? 'Saving...' : 'Save Configuration' }}
         </button>
@@ -112,7 +112,7 @@ const resendEmail = async (id) => {
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs divide-y divide-slate-100">
+        <table class="stack-table w-full text-left text-xs divide-y divide-slate-100">
           <thead class="bg-slate-50 text-slate-600 font-bold">
             <tr>
               <th class="py-2.5 px-4">Recipient</th>
@@ -125,19 +125,19 @@ const resendEmail = async (id) => {
           </thead>
           <tbody class="divide-y divide-slate-100 text-slate-700">
             <tr v-for="e in outbox" :key="e.id" class="hover:bg-slate-50">
-              <td class="py-2.5 px-4 font-bold text-slate-900">
+              <td class="stack-title py-2.5 px-4 font-bold text-slate-900">
                 <div>{{ e.recipient_name }}</div>
                 <div class="text-[10px] text-slate-400 font-mono">{{ e.recipient_email }}</div>
               </td>
-              <td class="py-2.5 px-4 truncate max-w-xs">{{ e.subject }}</td>
-              <td class="py-2.5 px-4 font-mono font-bold text-parliament-green">{{ e.reference_no }}</td>
-              <td class="py-2.5 px-4">
+              <td class="py-2.5 px-4" data-label="Subject">{{ e.subject }}</td>
+              <td class="py-2.5 px-4 font-mono font-bold text-parliament-green" data-label="Reference">{{ e.reference_no }}</td>
+              <td class="py-2.5 px-4" data-label="Status">
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
                   {{ e.status }}
                 </span>
               </td>
-              <td class="py-2.5 px-4 font-mono text-slate-500">{{ new Date(e.created_at).toLocaleString() }}</td>
-              <td class="py-2.5 px-4 text-right">
+              <td class="py-2.5 px-4 font-mono text-slate-500" data-label="Sent">{{ new Date(e.created_at).toLocaleString() }}</td>
+              <td class="stack-actions py-2.5 px-4 text-right">
                 <button 
                   @click="resendEmail(e.id)"
                   class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-100 font-bold text-[11px] inline-flex items-center space-x-1"

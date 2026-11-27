@@ -40,7 +40,13 @@ const unitLabel = computed(() => (auth.user?.unit || '').replaceAll('_', ' '))
     class="fixed lg:static z-50 inset-y-0 left-0 w-[16.25rem] bg-[#10241b] text-slate-300 flex flex-col border-r border-black/20 no-print transform transition-transform duration-200 lg:translate-x-0"
     :class="props.open ? 'translate-x-0' : '-translate-x-full'"
   >
-    <div class="px-4 pt-5 pb-3">
+    <div class="flex items-center justify-between px-4 pt-5 lg:hidden">
+      <span class="text-[11px] font-semibold uppercase tracking-[0.16em] text-parliament-gold">Menu</span>
+      <button type="button" class="rounded-lg p-2 text-slate-300 hover:bg-white/10" aria-label="Close menu" @click="emit('close')">
+        <span class="text-lg leading-none">×</span>
+      </button>
+    </div>
+    <div class="px-4 pt-3 pb-3 lg:pt-5">
       <div class="rounded-2xl bg-white/[0.04] border border-white/10 px-3.5 py-3">
         <div class="text-[10px] uppercase tracking-[0.16em] text-parliament-gold font-semibold">Workspace</div>
         <div class="text-sm font-semibold text-white mt-1 truncate">{{ unitLabel }}</div>

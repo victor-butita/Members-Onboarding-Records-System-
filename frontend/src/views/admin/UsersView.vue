@@ -141,7 +141,7 @@ const handleResetPassword = async () => {
         <div class="text-[11px] font-bold text-parliament-gold uppercase tracking-wider">User Administration & Hierarchy</div>
         <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Staff Accounts, Departments & Role Definitions</h1>
       </div>
-      <div class="flex items-center space-x-2">
+      <div class="flex flex-wrap items-center gap-2">
         <button 
           @click="fetchUsers" 
           class="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center space-x-1 shadow-sm"
@@ -162,7 +162,7 @@ const handleResetPassword = async () => {
     <!-- Users Table -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs divide-y divide-slate-100">
+        <table class="stack-table w-full text-left text-xs divide-y divide-slate-100">
           <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider text-[11px]">
             <tr>
               <th class="py-3.5 px-4">Full Name</th>
@@ -175,17 +175,17 @@ const handleResetPassword = async () => {
           </thead>
           <tbody class="divide-y divide-slate-100 text-slate-700">
             <tr v-for="u in users" :key="u.id" class="hover:bg-slate-50/80 transition-colors">
-              <td class="py-3 px-4 font-bold text-slate-900">
+              <td class="stack-title py-3 px-4 font-bold text-slate-900">
                 <div>{{ u.full_name }}</div>
                 <div class="text-[10px] text-slate-400 font-mono">{{ u.username }}</div>
               </td>
-              <td class="py-3 px-4 text-slate-600 font-medium">{{ u.email }}</td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4 text-slate-600 font-medium" data-label="Email">{{ u.email }}</td>
+              <td class="py-3 px-4" data-label="Department">
                 <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800 border border-slate-200">
                   {{ u.unit.replace(/_/g, ' ') }}
                 </span>
               </td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4" data-label="Role">
                 <span 
                   class="px-2.5 py-0.5 rounded-full text-[10px] font-bold"
                   :class="u.role === 'SUPER_USER' ? 'bg-amber-100 text-amber-900' : 'bg-slate-100 text-slate-700'"
@@ -193,14 +193,14 @@ const handleResetPassword = async () => {
                   {{ u.role }}
                 </span>
               </td>
-              <td class="py-3 px-4">
+              <td class="py-3 px-4" data-label="Status">
                 <span v-if="u.is_active" class="text-emerald-700 font-bold flex items-center space-x-1">
                   <CheckCircle2 class="w-3.5 h-3.5" />
                   <span>Active</span>
                 </span>
                 <span v-else class="text-red-600 font-bold">Disabled</span>
               </td>
-              <td class="py-3 px-4 text-right">
+              <td class="stack-actions py-3 px-4 text-right">
                 <div class="flex items-center justify-end space-x-2">
                   <button 
                     @click="openEditModal(u)"
