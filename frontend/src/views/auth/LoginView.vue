@@ -27,12 +27,12 @@ const slides = [
   {
     src: '/brand/chamber.jpg',
     title: 'The Chamber',
-    caption: 'Where the House sits'
+    caption: 'National Assembly floor'
   },
   {
     src: '/brand/parliament-banner.jpg',
-    title: 'Clock tower',
-    caption: 'Parliament of Kenya'
+    title: 'Parliament and Uhuru Park',
+    caption: 'Nairobi'
   }
 ]
 
